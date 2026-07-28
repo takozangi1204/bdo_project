@@ -1,0 +1,2955 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scheduler – T2 2026</title>
+  <meta name="description" content="Scheduling calendar for Trimester 2, July–October 2026">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    /* ══════════════════════════════════════════════════
+       DESIGN TOKENS
+       ══════════════════════════════════════════════════ */
+    :root {
+      --bg: #f3f4f8;
+      --surface: #ffffff;
+      --header-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --text: #2d3436;
+      --text-muted: #636e72;
+      --border: #e2e6ea;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+      --transition: 0.2s cubic-bezier(.4, 0, .2, 1);
+      --break-bg: #f0f0f0;
+      --break-stripe: repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0, 0, 0, 0.018) 6px, rgba(0, 0, 0, 0.018) 12px);
+
+      /* Category colours */
+      --c-mbua514: #E63946;
+      --c-mbua514-bg: #FFE0E3;
+      --c-mbua532: #457B9D;
+      --c-mbua532-bg: #D4E8F5;
+      --c-group: #2A9D8F;
+      --c-group-bg: #D1F0EB;
+      --c-job: #8E44AD;
+      --c-job-bg: #F3E5F5;
+      --c-other: #E67E22;
+      --c-other-bg: #FFF0DB;
+    }
+
+    /* ══════════════════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════════════════
+       HEADER
+       ══════════════════════════════════════════════════ */
+    .app-header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 16px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .app-header h1 span {
+      font-weight: 300;
+      opacity: 0.7;
+      font-size: 0.85em;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .btn-accent {
+      background: #6c5ce7;
+      color: #fff;
+    }
+
+    .btn-accent:hover {
+      background: #5a4bd1;
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: #E63946;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #c0303b;
+    }
+
+    .btn-success {
+      background: #2A9D8F;
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background: #228578;
+    }
+
+    /* ══════════════════════════════════════════════════
+       LEGEND BAR
+       ══════════════════════════════════════════════════ */
+    .legend-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+
+    .legend-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 20px;
+      transition: var(--transition);
+      user-select: none;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .legend-item:hover {
+      transform: scale(1.04);
+    }
+
+    .legend-item.active {
+      border-color: currentColor;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
+    }
+
+    .legend-item.inactive {
+      opacity: 0.35;
+      filter: grayscale(0.6);
+    }
+
+    .legend-item .filter-check {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 2px solid currentColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
+      font-size: 9px;
+      line-height: 1;
+    }
+
+    .legend-item.active .filter-check {
+      background: currentColor;
+    }
+
+    .legend-item.active .filter-check::after {
+      content: '✓';
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-break {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      background: var(--break-bg);
+      border-radius: 20px;
+      border: 1px dashed #ccc;
+    }
+
+    .legend-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .legend-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: inherit;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .legend-action-btn:hover {
+      background: #f0f0f0;
+      color: var(--text);
+    }
+
+    /* ══════════════════════════════════════════════════
+       CALENDAR CONTAINER
+       ══════════════════════════════════════════════════ */
+    .calendar-wrap {
+      max-width: 1320px;
+      margin: 24px auto;
+      padding: 0 20px 40px;
+    }
+
+    .calendar {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Table ── */
+    .cal-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .cal-table th {
+      background: #f8f9fb;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 10px 4px;
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .cal-table th:first-child {
+      width: 90px;
+      text-align: left;
+      padding-left: 14px;
+    }
+
+    .cal-table td {
+      border: 1px solid var(--border);
+      vertical-align: top;
+      padding: 4px 5px 6px;
+      min-height: 70px;
+      height: 74px;
+      transition: background var(--transition);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .cal-table td:hover {
+      background: #f0f3ff;
+    }
+
+    .cal-table td.break-cell {
+      background: var(--break-bg);
+      background-image: var(--break-stripe);
+    }
+
+    .cal-table td.break-cell:hover {
+      background: #e8e8e8;
+      background-image: var(--break-stripe);
+    }
+
+    .cal-table td.past-cell {
+      background: #bdc4ce;
+    }
+
+    .cal-table td.past-cell:hover {
+      background: #afb7c2;
+    }
+
+    .cal-table td.break-cell.past-cell {
+      background: #b0b7c0;
+      background-image: var(--break-stripe);
+    }
+
+    .cal-table td.break-cell.past-cell:hover {
+      background: #a2aab4;
+      background-image: var(--break-stripe);
+    }
+
+    .cal-table td.past-cell .day-num {
+      color: #2d3748;
+    }
+
+    .cal-table td:first-child {
+      cursor: default;
+      background: #fafbfc;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 6px 4px;
+      line-height: 1.35;
+    }
+
+    .cal-table td:first-child:hover {
+      background: #fafbfc;
+    }
+
+    .cal-table td.break-cell:first-child {
+      background: #ebebeb;
+      background-image: none;
+    }
+
+    .day-num {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      user-select: none;
+    }
+
+    .day-num.today {
+      background: #6c5ce7;
+      color: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    /* Month separator row */
+    .month-sep td {
+      background: #f0f2f5 !important;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      height: 6px !important;
+      min-height: 6px !important;
+      padding: 0 !important;
+      cursor: default !important;
+    }
+
+    .month-sep td:hover {
+      background: #f0f2f5 !important;
+    }
+
+    /* ── Event pills ── */
+    .event-pill {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
+      white-space: normal;
+      word-break: break-word;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .event-pill:hover {
+      filter: brightness(0.92);
+    }
+
+    .event-pill .pill-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pill-link {
+      text-decoration: none;
+      margin-left: 4px;
+      font-size: 1.1em;
+      filter: grayscale(1) opacity(0.7);
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .pill-link:hover {
+      filter: grayscale(0) opacity(1);
+      transform: scale(1.15);
+    }
+
+    .event-pill .pill-del {
+      opacity: 0;
+      pointer-events: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      font-size: 10px;
+      line-height: 14px;
+      text-align: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .event-pill:hover .pill-del {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .event-pill .pill-del:hover {
+      background: rgba(0, 0, 0, 0.45);
+    }
+
+    /* ── View Toggle Bar ── */
+    .view-toggle {
+      display: inline-flex;
+      background: #eef1f6;
+      padding: 3px;
+      border-radius: 20px;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .view-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 12px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .view-btn:hover {
+      color: var(--text);
+    }
+
+    .view-btn.active {
+      background: var(--surface);
+      color: #6c5ce7;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ── Day Header Row & To-Do Badges ── */
+    .day-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .todo-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 8px;
+      background: rgba(108, 92, 231, 0.12);
+      color: #6c5ce7;
+      line-height: 1.2;
+      user-select: none;
+    }
+
+    .todo-badge.all-done {
+      background: rgba(42, 157, 143, 0.18);
+      color: #2A9D8F;
+    }
+
+    /* ── To-Do Items ── */
+    .todo-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      padding: 3px 6px;
+      border-radius: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+      position: relative;
+    }
+
+    .todo-pill:hover {
+      filter: brightness(0.92);
+    }
+
+    .todo-pill.completed {
+      opacity: 0.65;
+    }
+
+    .todo-pill.completed .todo-text {
+      text-decoration: line-through;
+    }
+
+    .todo-checkbox {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      border: 1.5px solid currentColor;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      font-size: 9px;
+      line-height: 1;
+      transition: var(--transition);
+    }
+
+    .todo-pill.completed .todo-checkbox {
+      background: currentColor;
+    }
+
+    .todo-pill.completed .todo-checkbox::after {
+      content: '✓';
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .todo-text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .todo-pill .pill-del {
+      opacity: 0;
+      pointer-events: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff;
+      font-size: 10px;
+      line-height: 14px;
+      text-align: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .todo-pill:hover .pill-del {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .todo-pill .pill-del:hover {
+      background: rgba(0, 0, 0, 0.45);
+    }
+
+    /* ── Modal Type Tabs ── */
+    .modal-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: #f8f9fb;
+    }
+
+    .modal-tab {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+    }
+
+    .modal-tab.active {
+      color: #6c5ce7;
+      border-bottom-color: #6c5ce7;
+      background: var(--surface);
+    }
+
+    /* ══════════════════════════════════════════════════
+       MODAL
+       ══════════════════════════════════════════════════ */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      box-shadow: var(--shadow-lg);
+      width: 440px;
+      max-width: 94vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      animation: modalIn 0.25s ease;
+      overflow: hidden;
+      margin: auto;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .modal-head h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .modal-head p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .modal-body {
+      padding: 18px 22px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .modal-foot {
+      padding: 14px 22px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      background: #fafbfc;
+      flex-shrink: 0;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.88rem;
+      transition: var(--transition);
+      background: #fff;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #6c5ce7;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.12);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* Confirm modal */
+    .confirm-body {
+      text-align: center;
+      padding: 28px 22px 18px;
+    }
+
+    .confirm-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #FFF0F0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .confirm-icon svg {
+      width: 26px;
+      height: 26px;
+      color: #E63946;
+    }
+
+    .confirm-body h3 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .confirm-body p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════════════════════════
+       TOAST
+       ══════════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.4s forwards;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.success {
+      border-left: 4px solid #2A9D8F;
+    }
+
+    .toast.info {
+      border-left: 4px solid #457B9D;
+    }
+
+    .toast.warn {
+      border-left: 4px solid #E63946;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes toastOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+
+    /* Time display on pills */
+    .pill-time {
+      font-size: 0.58rem;
+      font-weight: 400;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+
+    .time-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .time-row .form-group {
+      flex: 1;
+      margin-bottom: 14px;
+    }
+
+    /* ══════════════════════════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════════════════════════ */
+    @media (max-width: 800px) {
+      .app-header {
+        padding: 14px 16px;
+      }
+
+      .legend-bar {
+        padding: 10px 16px;
+      }
+
+      .calendar-wrap {
+        padding: 0 8px 24px;
+        margin-top: 14px;
+      }
+
+      .cal-table th,
+      .cal-table td {
+        font-size: 0.65rem;
+        padding: 3px;
+      }
+
+      .cal-table th:first-child {
+        width: 54px;
+      }
+
+      .event-pill {
+        font-size: 0.58rem;
+        padding: 1px 4px;
+      }
+    }
+
+    /* Week label styling */
+    .week-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .week-label .wk {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.72rem;
+    }
+
+    .week-label .dt {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.62rem;
+    }
+
+    .break-badge {
+      display: inline-block;
+      background: #ddd;
+      color: #888;
+      font-size: 0.56rem;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-top: 2px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    /* Monday-First Mini-Calendar Popover */
+    .monday-cal-popover {
+      position: absolute;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 12px;
+      width: 280px;
+      z-index: 700;
+      display: none;
+    }
+    .monday-cal-popover.open {
+      display: block;
+    }
+    .monday-cal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .monday-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      text-align: center;
+    }
+    .monday-cal-grid .day-head {
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: #6c5ce7;
+      padding: 4px 0;
+    }
+    .monday-cal-grid .day-cell {
+      font-size: 0.76rem;
+      padding: 6px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .monday-cal-grid .day-cell:hover {
+      background: #f0f3ff;
+      color: #6c5ce7;
+      font-weight: 600;
+    }
+    .monday-cal-grid .day-cell.selected {
+      background: #6c5ce7;
+      color: #fff;
+      font-weight: 700;
+    }
+    .monday-cal-grid .day-cell.other-month {
+      opacity: 0.3;
+    }
+
+    /* Django backend badge */
+    .django-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #e0e0e0;
+      margin-left: 8px;
+    }
+    .django-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2A9D8F;
+      transition: background 0.3s;
+    }
+
+    /* App Switcher Nav */
+    .app-nav-switcher {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.22);
+      padding: 3px;
+      border-radius: 20px;
+      gap: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .app-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .app-nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .app-nav-link.active {
+      background: #ffffff;
+      color: #1a1a2e;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="app-header" id="appHeader">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 16px; flex-wrap: wrap;">
+      <h1>📅 Scheduler <span id="headerDateRange">Jul 6 – Oct 18, 2026</span></h1>
+      <nav class="app-nav-switcher">
+        <a href="/" class="app-nav-link">🗺 Roadmap</a>
+        <a href="/scheduler/" class="app-nav-link active">📅 Scheduler</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" onclick="openSettingsModal()" title="Calendar & Break Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Settings
+      </button>
+      <button class="btn btn-primary" onclick="openCategoryModal()" title="Manage Categories">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        Categories
+      </button>
+      <button class="btn btn-primary" onclick="document.getElementById('fileLoad').click()" title="Import data from JSON file">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        </svg>
+        Import JSON
+      </button>
+      <button class="btn btn-primary" onclick="saveJSON()" title="Export data to JSON file">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Export JSON
+      </button>
+      <button class="btn btn-accent" onclick="exportPNG()" title="Export to PNG">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 17v-2a4 4 0 014-4h4m-4 4l4-4m-4 4l-4-4M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z" />
+        </svg>
+        Export PNG
+      </button>
+      <button class="btn btn-danger" onclick="openClearAllModal()" title="Clear all events & tasks (Superuser Password Required)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Clear All
+      </button>
+      <input type="file" id="fileLoad" accept=".json" style="display:none" onchange="loadJSON(event)">
+    </div>
+  </header>
+
+  <!-- ═══════════════════ LEGEND ═══════════════════ -->
+  <div class="legend-bar" id="legendBar">
+    <span class="legend-label">Categories</span>
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- ═══════════════════ CALENDAR ═══════════════════ -->
+  <div class="calendar-wrap">
+    <div class="calendar">
+      <table class="cal-table" id="calTable">
+        <thead id="calHead"></thead>
+        <tbody id="calBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ ADD EVENT / TO-DO MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="addModal">
+    <div class="modal">
+      <div class="modal-tabs" id="modalTypeTabs">
+        <button class="modal-tab active" id="tabTypeEvent" type="button" onclick="switchModalType('event')">📅 Add Event</button>
+        <button class="modal-tab" id="tabTypeTodo" type="button" onclick="switchModalType('todo')">☑️ Add To-Do Task</button>
+      </div>
+      <div class="modal-head">
+        <h2 id="addModalTitle">Add Event</h2>
+        <p id="addModalDate"></p>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="evtCategory">Category</label>
+          <select id="evtCategory"></select>
+        </div>
+        <div class="form-group">
+          <label for="evtTitle">Event Title</label>
+          <input type="text" id="evtTitle" placeholder="e.g. Team meeting, Deadline…" maxlength="80">
+        </div>
+        <div class="form-group">
+          <label for="evtUrl">Website Link (optional)</label>
+          <input type="url" id="evtUrl" placeholder="https://...">
+        </div>
+        <div class="time-row">
+          <div class="form-group">
+            <label for="evtStartTime">Start Time (optional)</label>
+            <select id="evtStartTime">
+              <option value="">— No time —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="evtEndTime">End Time (optional)</label>
+            <select id="evtEndTime">
+              <option value="">— No time —</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="evtDate">Event / Task Date</label>
+          <div style="display: flex; gap: 4px;">
+            <input type="date" id="evtDate" style="flex: 1;">
+            <button type="button" class="btn" onclick="openMondayCalPicker('evtDate', this, 'exact')" title="Open Monday-First Calendar Picker" style="padding: 6px 10px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size: 0.95rem;">📅</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="evtEndDate">End Date (optional, for multi-day)</label>
+          <div style="display: flex; gap: 4px;">
+            <input type="date" id="evtEndDate" style="flex: 1;">
+            <button type="button" class="btn" onclick="openMondayCalPicker('evtEndDate', this, 'exact')" title="Open Monday-First Calendar Picker" style="padding: 6px 10px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size: 0.95rem;">📅</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="evtRecurrence">Recurrence</label>
+          <select id="evtRecurrence">
+            <option value="none">None (one-time)</option>
+            <option value="weekly">Weekly (every week)</option>
+            <option value="fortnightly">Fortnightly (every 2 weeks)</option>
+          </select>
+        </div>
+        <div class="form-group" id="editScopeGroup" style="display:none;">
+          <label>Update Scope</label>
+          <div style="display:flex; gap: 16px; margin-top: 4px;">
+            <label style="font-weight:normal; text-transform:none; cursor:pointer; color:var(--text); font-size:0.85rem;">
+              <input type="radio" name="editScope" value="single" checked> Just this event
+            </label>
+            <label style="font-weight:normal; text-transform:none; cursor:pointer; color:var(--text); font-size:0.85rem;">
+              <input type="radio" name="editScope" value="series"> Entire series
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('addModal')">Cancel</button>
+        <button class="btn btn-accent" id="addModalBtn" onclick="confirmAdd()">Add Event</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ DELETE CONFIRM MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="delModal">
+    <div class="modal">
+      <div class="confirm-body">
+        <div class="confirm-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86a2 2 0 001.74-2.97L13.74 4.03a2 2 0 00-3.48 0L3.33 16.03A2 2 0 005.07 19z" />
+          </svg>
+        </div>
+        <h3>Delete Event?</h3>
+        <p id="delModalInfo">Are you sure you want to delete this event?</p>
+        <div id="delScopeGroup" style="display:none; margin-top: 16px; text-align: left; background: #f8f9fb; padding: 12px; border-radius: 6px; border: 1px solid var(--border);">
+          <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px;">Delete Scope</label>
+          <label style="font-size:0.85rem; display:block; margin-bottom:6px; cursor:pointer; color:var(--text);">
+            <input type="radio" name="delScope" value="single" checked> Just this event
+          </label>
+          <label style="font-size:0.85rem; display:block; cursor:pointer; color:var(--text);">
+            <input type="radio" name="delScope" value="series"> Entire series
+          </label>
+        </div>
+      </div>
+      <div class="modal-foot" style="justify-content:center">
+        <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('delModal')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ CLEAR ALL CONFIRM MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="clearAllModal">
+    <div class="modal">
+      <div class="confirm-body">
+        <div class="confirm-icon" style="background: #FFF0F0;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86a2 2 0 001.74-2.97L13.74 4.03a2 2 0 00-3.48 0L3.33 16.03A2 2 0 005.07 19z" />
+          </svg>
+        </div>
+        <h3>⚠️ Delete All Events & Tasks?</h3>
+        <p>This action will permanently delete all events and tasks from the database. Enter superuser password to confirm.</p>
+        <div style="margin-top:14px; text-align:left;">
+          <label for="clearAllPassword" style="font-size:0.75rem; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Superuser Password</label>
+          <input type="password" id="clearAllPassword" style="width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:6px; font-size:0.9rem; margin-top:4px;" placeholder="Enter password...">
+          <div id="clearAllError" style="color:#e63946; font-size:0.8rem; margin-top:6px; font-weight:500;"></div>
+        </div>
+      </div>
+      <div class="modal-foot" style="justify-content:center">
+        <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('clearAllModal')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmClearAll()">Confirm Delete All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ CATEGORY MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="catModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Manage Categories</h2>
+        <p>You can have up to 10 categories.</p>
+      </div>
+      <div class="modal-body">
+        <div id="catList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        <button class="btn" id="addCatBtn" onclick="addCategory()" style="width:100%; margin-top:14px; justify-content:center; color:var(--text); border:1px dashed var(--border); background:#fafbfc;">
+          + Add Category
+        </button>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-accent" onclick="saveCategoriesAndClose()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SETTINGS MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal" style="width: 520px;">
+      <div class="modal-head">
+        <h2>⚙️ Calendar & Break Settings</h2>
+        <p>Configure calendar displayed dates and break periods.</p>
+      </div>
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <div style="font-weight: 700; font-size: 0.85rem; color: #6c5ce7; margin-bottom: 6px; border-bottom: 1px solid var(--border); padding-bottom: 4px;">📅 Displayed Dates Range (Monday – Sunday)</div>
+        <div style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 10px; font-style: italic;">Select calendar weeks starting on Monday and ending on Sunday using the selection tools below.</div>
+        <div style="display: flex; gap: 12px; margin-bottom: 18px;">
+          <div class="form-group" style="flex: 1; margin-bottom: 0;">
+            <label for="cfgStartDateSelect">Start Week (Monday)</label>
+            <div style="display: flex; gap: 4px;">
+              <select id="cfgStartDateSelect" style="flex:1; padding:7px; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:0.82rem; font-weight:500;"></select>
+              <button type="button" class="btn" onclick="openMondayCalPicker('cfgStartDateSelect', this)" title="Open Monday-First Calendar Picker" style="padding: 6px 10px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size: 0.95rem;">📅</button>
+            </div>
+          </div>
+          <div class="form-group" style="flex: 1; margin-bottom: 0;">
+            <label for="cfgEndDateSelect">End Week (Sunday)</label>
+            <div style="display: flex; gap: 4px;">
+              <select id="cfgEndDateSelect" style="flex:1; padding:7px; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:0.82rem; font-weight:500;"></select>
+              <button type="button" class="btn" onclick="openMondayCalPicker('cfgEndDateSelect', this)" title="Open Monday-First Calendar Picker" style="padding: 6px 10px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size: 0.95rem;">📅</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-weight: 700; font-size: 0.85rem; color: #6c5ce7; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+          <span>☕ Break Durations & Names</span>
+        </div>
+        <div id="cfgBreakList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <button class="btn" onclick="addBreakPeriodInput()" style="width: 100%; margin-top: 12px; justify-content: center; color: var(--text); border: 1px dashed var(--border); background: #fafbfc;">
+          + Add Break Period
+        </button>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('settingsModal')">Cancel</button>
+        <button class="btn btn-accent" onclick="saveSettingsAndClose()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toasts"></div>
+
+  <!-- Monday-First Popover Calendar Element -->
+  <div id="mondayCalPopover" class="monday-cal-popover">
+    <div class="monday-cal-header">
+      <button type="button" onclick="navMondayCal(-1)" style="border:none;background:none;cursor:pointer;font-weight:700;font-size:1.1rem;color:#6c5ce7;">◄</button>
+      <h4 id="mondayCalTitle" style="font-size:0.88rem;font-weight:700;color:var(--text)">Jul 2026</h4>
+      <button type="button" onclick="navMondayCal(1)" style="border:none;background:none;cursor:pointer;font-weight:700;font-size:1.1rem;color:#6c5ce7;">►</button>
+    </div>
+    <div class="monday-cal-grid" id="mondayCalGrid"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT — Django Backend Version
+       ═══════════════════════════════════════════════════════════ -->
+  <script>
+    /* ────────────────────────────────────────────────────
+       CONSTANTS
+       ──────────────────────────────────────────────────── */
+    const API_BASE = '/scheduler/api';
+
+    const DEFAULT_CATEGORIES = [
+      { id: 'mbua514', name: 'MBUA514', color: '#E63946', bg: '#FFE0E3' },
+      { id: 'mbua532', name: 'MBUA532', color: '#457B9D', bg: '#D4E8F5' },
+      { id: 'group', name: 'BDO Project', color: '#2A9D8F', bg: '#D1F0EB' },
+      { id: 'job', name: 'Part-time Job', color: '#8E44AD', bg: '#F3E5F5' },
+      { id: 'other', name: 'Other', color: '#E67E22', bg: '#FFF0DB' },
+    ];
+    let CATEGORIES = [...DEFAULT_CATEGORIES];
+
+    const PRESET_COLORS = [
+      { color: '#E63946', bg: '#FFE0E3' },
+      { color: '#457B9D', bg: '#D4E8F5' },
+      { color: '#2A9D8F', bg: '#D1F0EB' },
+      { color: '#8E44AD', bg: '#F3E5F5' },
+      { color: '#E67E22', bg: '#FFF0DB' },
+      { color: '#2E7D32', bg: '#E8F5E9' },
+      { color: '#F57F17', bg: '#FFF9C4' },
+      { color: '#00838F', bg: '#E0F7FA' },
+      { color: '#512DA8', bg: '#EDE7F6' },
+      { color: '#5D4037', bg: '#EFEBE9' },
+    ];
+
+    const DEFAULT_SETTINGS = {
+      startDate: '2026-07-06',
+      endDate: '2026-10-18',
+      breaks: [
+        { id: 'b1', name: 'School Break', startDate: '2026-08-17', endDate: '2026-08-30' },
+        { id: 'b2', name: 'School Break', startDate: '2026-10-12', endDate: '2026-10-18' }
+      ]
+    };
+    let appSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+
+    const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    /* ────────────────────────────────────────────────────
+       STATE
+       ──────────────────────────────────────────────────── */
+    let events = [];
+    let todos = [];
+    let currentViewMode = 'events';
+    let modalItemType = 'event';
+    let editingEventId = null;
+    let editingTodoId = null;
+    let pendingDelTodoId = null;
+    let draggedTodoId = null;
+    let pendingDate = null;
+    let pendingDelId = null;
+
+    let visibleCategories = new Set(CATEGORIES.map(c => c.id));
+
+    /* ────────────────────────────────────────────────────
+       HELPERS
+       ──────────────────────────────────────────────────── */
+    function dateStr(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${dd}`;
+    }
+    function parseDate(s) {
+      const [y, m, d] = s.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    function addDays(d, n) {
+      const r = new Date(d);
+      r.setDate(r.getDate() + n);
+      return r;
+    }
+    function getMonday(d) {
+      const date = new Date(d);
+      const day = (date.getDay() + 6) % 7;
+      date.setDate(date.getDate() - day);
+      return date;
+    }
+    function getSunday(d) {
+      const date = new Date(d);
+      const day = (date.getDay() + 6) % 7;
+      date.setDate(date.getDate() + (6 - day));
+      return date;
+    }
+    function catById(id) { return CATEGORIES.find(c => c.id === id); }
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+    function getStartDate() {
+      if (!appSettings.startDate) return new Date(2026, 6, 6);
+      return parseDate(appSettings.startDate);
+    }
+    function getEndDate() {
+      if (!appSettings.endDate) return new Date(2026, 9, 18);
+      return parseDate(appSettings.endDate);
+    }
+    function getBreakInfo(dateObj) {
+      if (!appSettings.breaks || !Array.isArray(appSettings.breaks)) return null;
+      const ds = typeof dateObj === 'string' ? dateObj : dateStr(dateObj);
+      for (const b of appSettings.breaks) {
+        if (b.startDate && b.endDate && ds >= b.startDate && ds <= b.endDate) return b;
+      }
+      return null;
+    }
+    function isBreakWeek(mondayDate) {
+      for (let i = 0; i < 7; i++) {
+        const d = addDays(mondayDate, i);
+        const b = getBreakInfo(d);
+        if (b) return b;
+      }
+      return null;
+    }
+    function updateHeaderDateRange() {
+      const start = getStartDate();
+      const end = getEndDate();
+      const startStr = `${MONTHS[start.getMonth()]} ${start.getDate()}`;
+      const endStr = `${MONTHS[end.getMonth()]} ${end.getDate()}, ${end.getFullYear()}`;
+      const el = document.getElementById('headerDateRange');
+      if (el) el.textContent = `${startStr} – ${endStr}`;
+    }
+    function todayStr() {
+      const t = new Date();
+      return dateStr(t);
+    }
+
+    /* ────────────────────────────────────────────────────
+       TOAST NOTIFICATIONS
+       ──────────────────────────────────────────────────── */
+    function toast(msg, type = 'info') {
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      document.getElementById('toasts').appendChild(el);
+      setTimeout(() => el.remove(), 2800);
+    }
+
+    /* ────────────────────────────────────────────────────
+       MODAL HELPERS
+       ──────────────────────────────────────────────────── */
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    document.addEventListener('click', e => {
+      if (e.target.classList.contains('modal-backdrop') && e.target.classList.contains('open')) {
+        e.target.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+      }
+    });
+
+    /* ────────────────────────────────────────────────────
+       DJANGO API HELPERS
+       ──────────────────────────────────────────────────── */
+    function updateDjangoStatus(msg, isSuccess = true) {
+      const text = document.getElementById('djangoStatusText');
+      const dot = document.getElementById('djangoDot');
+      if (text) text.textContent = msg;
+      if (dot) dot.style.background = isSuccess ? '#2A9D8F' : '#E63946';
+    }
+
+    async function apiFetch(endpoint, options = {}) {
+      try {
+        const res = await fetch(`${API_BASE}${endpoint}`, {
+          headers: { 'Content-Type': 'application/json', ...options.headers },
+          ...options,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.error(`API error (${endpoint}):`, err);
+        updateDjangoStatus('Connection Error', false);
+        throw err;
+      }
+    }
+
+    async function loadAllData() {
+      try {
+        const data = await apiFetch('/data/');
+
+        // Categories
+        if (data.categories && data.categories.length > 0) {
+          CATEGORIES = data.categories.map(c => ({
+            id: c.cat_id,
+            name: c.name,
+            color: c.color,
+            bg: c.bg,
+          }));
+          visibleCategories = new Set(CATEGORIES.map(c => c.id));
+        }
+
+        // Events
+        events = (data.events || []).map(e => ({
+          id: e.event_id,
+          seriesId: e.series_id || null,
+          date: e.date,
+          catId: e.category_id,
+          title: e.title,
+          url: e.url || '',
+          startTime: e.start_time || '',
+          endTime: e.end_time || '',
+        }));
+
+        // Todos
+        todos = (data.todos || []).map(t => ({
+          id: t.todo_id,
+          date: t.date,
+          catId: t.category_id,
+          title: t.title,
+          url: t.url || '',
+          completed: t.completed,
+          sort_order: t.sort_order || 0,
+        }));
+
+        // Settings
+        if (data.settings) {
+          if (data.settings.startDate) appSettings.startDate = data.settings.startDate;
+          if (data.settings.endDate) appSettings.endDate = data.settings.endDate;
+          if (data.settings.viewMode && ['events', 'todos'].includes(data.settings.viewMode)) {
+            currentViewMode = data.settings.viewMode;
+          }
+        }
+
+        // Breaks
+        if (data.breaks && data.breaks.length > 0) {
+          appSettings.breaks = data.breaks.map(b => ({
+            id: b.break_id,
+            name: b.name,
+            startDate: b.start_date,
+            endDate: b.end_date,
+          }));
+        }
+
+        updateDjangoStatus('Django Backend', true);
+        return true;
+      } catch (err) {
+        console.error('Failed to load data:', err);
+        updateDjangoStatus('Load Failed', false);
+        return false;
+      }
+    }
+
+    /* ── Debounced auto-save (no-op for Django: individual actions save via API) ── */
+    let _saveTimer = null;
+    function autoSave() {
+      // In Django mode, saves happen per-action via API calls.
+      // This is kept as a no-op for compatibility with the rendering flow.
+    }
+
+    /* ────────────────────────────────────────────────────
+       VIEW MODE
+       ──────────────────────────────────────────────────── */
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        if (btn.dataset.view === mode) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      // Save view mode setting to backend
+      apiFetch('/settings/save/', {
+        method: 'POST',
+        body: JSON.stringify({ settings: { viewMode: mode }, breaks: appSettings.breaks.map(b => ({ id: b.id, name: b.name, startDate: b.startDate, endDate: b.endDate })) })
+      }).catch(() => {});
+      renderCalendar();
+    }
+
+    /* ────────────────────────────────────────────────────
+       JSON SAVE / LOAD (file export/import)
+       ──────────────────────────────────────────────────── */
+    function saveJSON() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const fileName = `${yyyy}${mm}${dd}_${hh}${min}_schedulerdata.json`;
+
+      const dataToSave = {
+        events: events,
+        categories: CATEGORIES,
+        todos: todos,
+        settings: appSettings,
+        exportedAt: now.toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(dataToSave, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast('Data saved as JSON', 'success');
+    }
+
+    async function loadJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          const importData = {};
+
+          if (Array.isArray(parsed)) {
+            importData.events = parsed;
+          } else {
+            importData.events = parsed.events || [];
+            importData.todos = parsed.todos || [];
+            importData.categories = parsed.categories || [];
+            importData.settings = parsed.settings || {};
+          }
+
+          const res = await apiFetch('/import/', {
+            method: 'POST',
+            body: JSON.stringify(importData),
+          });
+
+          // Reload all data from server
+          await loadAllData();
+          buildLegend();
+          buildCategorySelect();
+          renderCalendar();
+          toast(`Loaded ${res.imported_events || 0} event(s) & ${res.imported_todos || 0} to-do(s)`, 'success');
+        } catch (err) {
+          toast('Failed to import JSON', 'warn');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    /* ────────────────────────────────────────────────────
+       BUILD LEGEND
+       ──────────────────────────────────────────────────── */
+    function buildLegend() {
+      const bar = document.getElementById('legendBar');
+      bar.innerHTML = '<span class="legend-label">Categories</span>';
+      CATEGORIES.forEach(c => {
+        const el = document.createElement('span');
+        el.className = 'legend-item active';
+        el.style.background = c.bg;
+        el.style.color = c.color;
+        el.dataset.catId = c.id;
+        el.innerHTML = `<span class="filter-check"></span><span class="legend-dot" style="background:${c.color}"></span>${c.name}`;
+        el.addEventListener('click', () => toggleCategoryFilter(c.id));
+        bar.appendChild(el);
+      });
+
+      const divider = document.createElement('span');
+      divider.className = 'legend-divider';
+      bar.appendChild(divider);
+
+      const showAllBtn = document.createElement('button');
+      showAllBtn.className = 'legend-action-btn';
+      showAllBtn.textContent = 'Show All';
+      showAllBtn.addEventListener('click', () => setAllCategoryFilters(true));
+      bar.appendChild(showAllBtn);
+
+      const hideAllBtn = document.createElement('button');
+      hideAllBtn.className = 'legend-action-btn';
+      hideAllBtn.textContent = 'Hide All';
+      hideAllBtn.addEventListener('click', () => setAllCategoryFilters(false));
+      bar.appendChild(hideAllBtn);
+
+      const br = document.createElement('span');
+      br.className = 'legend-break';
+      br.innerHTML = '▤ School Break';
+      bar.appendChild(br);
+
+      const viewToggle = document.createElement('div');
+      viewToggle.className = 'view-toggle';
+      viewToggle.innerHTML = `
+        <button class="view-btn ${currentViewMode === 'events' ? 'active' : ''}" data-view="events" onclick="setViewMode('events')">📅 Events</button>
+        <button class="view-btn ${currentViewMode === 'todos' ? 'active' : ''}" data-view="todos" onclick="setViewMode('todos')">☑️ To-Dos</button>
+      `;
+      bar.appendChild(viewToggle);
+
+      updateLegendUI();
+    }
+
+    /* ────────────────────────────────────────────────────
+       CATEGORY FILTER
+       ──────────────────────────────────────────────────── */
+    function toggleCategoryFilter(catId) {
+      if (visibleCategories.has(catId)) visibleCategories.delete(catId);
+      else visibleCategories.add(catId);
+      updateLegendUI();
+      renderCalendar();
+    }
+    function setAllCategoryFilters(showAll) {
+      if (showAll) CATEGORIES.forEach(c => visibleCategories.add(c.id));
+      else visibleCategories.clear();
+      updateLegendUI();
+      renderCalendar();
+    }
+    function updateLegendUI() {
+      document.querySelectorAll('.legend-item[data-cat-id]').forEach(el => {
+        const catId = el.dataset.catId;
+        if (visibleCategories.has(catId)) {
+          el.classList.add('active');
+          el.classList.remove('inactive');
+        } else {
+          el.classList.remove('active');
+          el.classList.add('inactive');
+        }
+      });
+    }
+
+    /* ────────────────────────────────────────────────────
+       BUILD CATEGORY SELECT
+       ──────────────────────────────────────────────────── */
+    function buildCategorySelect() {
+      const sel = document.getElementById('evtCategory');
+      sel.innerHTML = '';
+      CATEGORIES.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        opt.style.color = c.color;
+        opt.style.fontWeight = '600';
+        sel.appendChild(opt);
+      });
+    }
+
+    /* ────────────────────────────────────────────────────
+       CATEGORY MODAL MANAGEMENT
+       ──────────────────────────────────────────────────── */
+    let dragStartIndex = null;
+
+    function handleDragStart(e) {
+      dragStartIndex = +this.dataset.index;
+      e.dataTransfer.effectAllowed = 'move';
+      this.style.opacity = '0.4';
+    }
+    function handleDragOver(e) { e.preventDefault(); return false; }
+    function handleDragEnter(e) { this.style.borderTop = '2px solid #6c5ce7'; }
+    function handleDragLeave(e) { this.style.borderTop = ''; }
+    function handleDrop(e) {
+      e.stopPropagation();
+      this.style.borderTop = '';
+      const dragEndIndex = +this.dataset.index;
+      if (dragStartIndex !== dragEndIndex && dragStartIndex !== null) {
+        saveCategoriesInputs();
+        const movedItem = CATEGORIES.splice(dragStartIndex, 1)[0];
+        CATEGORIES.splice(dragEndIndex, 0, movedItem);
+        renderCategoryList();
+      }
+      return false;
+    }
+    function handleDragEnd(e) {
+      this.style.opacity = '1';
+      document.querySelectorAll('#catList > div').forEach(el => el.style.borderTop = '');
+    }
+
+    function saveCategoriesInputs() {
+      const inputs = document.querySelectorAll('.cat-name-input');
+      inputs.forEach(inp => {
+        const id = inp.dataset.id;
+        const cat = CATEGORIES.find(c => c.id === id);
+        if (cat) cat.name = inp.value.trim() || 'Unnamed';
+      });
+    }
+
+    function deleteCategory(id) {
+      if (CATEGORIES.length <= 1) {
+        toast('You must have at least one category', 'warn');
+        return;
+      }
+      if (confirm('Delete this category? Events using it will no longer be visible.')) {
+        saveCategoriesInputs();
+        CATEGORIES = CATEGORIES.filter(c => c.id !== id);
+        renderCategoryList();
+      }
+    }
+
+    function openCategoryModal() {
+      renderCategoryList();
+      openModal('catModal');
+    }
+
+    function renderCategoryList() {
+      const list = document.getElementById('catList');
+      list.innerHTML = '';
+      CATEGORIES.forEach((cat, index) => {
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.gap = '8px';
+        item.style.alignItems = 'center';
+        item.style.padding = '4px 0';
+        item.style.transition = 'border-top 0.2s ease';
+        item.draggable = true;
+        item.dataset.index = index;
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragover', handleDragOver);
+        item.addEventListener('drop', handleDrop);
+        item.addEventListener('dragenter', handleDragEnter);
+        item.addEventListener('dragleave', handleDragLeave);
+        item.addEventListener('dragend', handleDragEnd);
+        item.innerHTML = `
+          <div style="cursor:grab; padding:4px; opacity:0.4;" title="Drag to reorder">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h16M4 16h16"/></svg>
+          </div>
+          <div style="width:20px; height:20px; border-radius:50%; background:${cat.bg}; border:2px solid ${cat.color}; flex-shrink:0;"></div>
+          <input type="text" class="cat-name-input" value="${cat.name.replace(/"/g, '&quot;')}" data-id="${cat.id}" style="flex:1; padding:6px; border:1px solid var(--border); border-radius:4px; font-size:0.85rem;" />
+          <button onclick="deleteCategory('${cat.id}')" style="background:none; border:none; color:#E63946; cursor:pointer; padding:4px; margin-left:4px;" title="Delete Category">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+          </button>
+        `;
+        list.appendChild(item);
+      });
+      document.getElementById('addCatBtn').style.display = CATEGORIES.length >= 10 ? 'none' : 'flex';
+    }
+
+    function addCategory() {
+      if (CATEGORIES.length >= 10) {
+        toast('Maximum 10 categories allowed', 'warn');
+        return;
+      }
+      const index = CATEGORIES.length;
+      const preset = PRESET_COLORS[index % PRESET_COLORS.length];
+      CATEGORIES.push({
+        id: 'cat_' + uid(),
+        name: 'New Category ' + (index + 1),
+        color: preset.color,
+        bg: preset.bg
+      });
+      renderCategoryList();
+    }
+
+    async function saveCategoriesAndClose() {
+      saveCategoriesInputs();
+      CATEGORIES.forEach(c => visibleCategories.add(c.id));
+
+      try {
+        await apiFetch('/categories/save/', {
+          method: 'POST',
+          body: JSON.stringify({ categories: CATEGORIES }),
+        });
+      } catch (err) {
+        toast('Failed to save categories', 'warn');
+      }
+
+      buildLegend();
+      buildCategorySelect();
+      renderCalendar();
+      closeModal('catModal');
+      toast('Categories updated', 'success');
+    }
+
+    /* ────────────────────────────────────────────────────
+       RENDER CALENDAR
+       ──────────────────────────────────────────────────── */
+    function renderCalendar() {
+      const thead = document.getElementById('calHead');
+      const tbody = document.getElementById('calBody');
+      const today = todayStr();
+
+      thead.innerHTML = `<tr><th>Week</th>${DAYS.map(d => `<th>${d}</th>`).join('')}</tr>`;
+      tbody.innerHTML = '';
+      let weekNum = 1;
+
+      const startDate = getStartDate();
+      const calendarEndDate = getEndDate();
+      const dayOfWeek = (startDate.getDay() + 6) % 7;
+      let cursor = new Date(startDate);
+      cursor.setDate(cursor.getDate() - dayOfWeek);
+
+      let lastMonth = cursor.getMonth();
+
+      while (cursor <= calendarEndDate) {
+        const monday = new Date(cursor);
+        const weekBreak = isBreakWeek(monday);
+        const isBreak = !!weekBreak;
+        const breakName = weekBreak ? (weekBreak.name || 'BREAK') : '';
+
+        if (cursor.getMonth() !== lastMonth) {
+          const sep = document.createElement('tr');
+          sep.className = 'month-sep';
+          sep.innerHTML = `<td colspan="8"></td>`;
+          tbody.appendChild(sep);
+          lastMonth = cursor.getMonth();
+        }
+
+        const tr = document.createElement('tr');
+        const wkTd = document.createElement('td');
+        if (isBreak) wkTd.classList.add('break-cell');
+        const sunday = addDays(monday, 6);
+        wkTd.innerHTML = `
+          <div class="week-label">
+            <span class="wk">W${weekNum}</span>
+            <span class="dt">${MONTHS[monday.getMonth()]} ${monday.getDate()}–${monday.getMonth() !== sunday.getMonth() ? MONTHS[sunday.getMonth()] + ' ' : ''}${sunday.getDate()}</span>
+            ${isBreak ? `<span class="break-badge">${breakName.toUpperCase()}</span>` : ''}
+          </div>`;
+        tr.appendChild(wkTd);
+
+        for (let i = 0; i < 7; i++) {
+          const day = addDays(monday, i);
+          const ds = dateStr(day);
+          const td = document.createElement('td');
+          const dayBreak = getBreakInfo(day);
+          if (dayBreak) td.classList.add('break-cell');
+          if (ds < today) td.classList.add('past-cell');
+          td.dataset.date = ds;
+
+          td.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            td.style.boxShadow = 'inset 0 0 0 2px #6c5ce7';
+          });
+          td.addEventListener('dragleave', e => { td.style.boxShadow = ''; });
+          td.addEventListener('drop', e => {
+            e.preventDefault();
+            td.style.boxShadow = '';
+            const evId = e.dataTransfer.getData('text/plain');
+            const todoId = draggedTodoId || e.dataTransfer.getData('text/todo-id');
+            if (evId) {
+              const evToMove = events.find(x => x.id === evId);
+              if (evToMove && evToMove.date !== ds) {
+                evToMove.date = ds;
+                apiFetch('/event/save/', {
+                  method: 'POST',
+                  body: JSON.stringify({ event_id: evToMove.id, series_id: evToMove.seriesId, date: ds, catId: evToMove.catId, title: evToMove.title, url: evToMove.url, startTime: evToMove.startTime, endTime: evToMove.endTime })
+                }).catch(() => {});
+                renderCalendar();
+              }
+            } else if (todoId) {
+              const srcIdx = todos.findIndex(x => x.id === todoId);
+              if (srcIdx !== -1) {
+                const [todoToMove] = todos.splice(srcIdx, 1);
+                todoToMove.date = ds;
+                todos.push(todoToMove);
+                saveTodoReorder();
+                renderCalendar();
+              }
+            }
+            draggedTodoId = null;
+          });
+
+          const dayEvents = (currentViewMode === 'todos') ? [] : events.filter(ev => ev.date === ds && visibleCategories.has(ev.catId));
+          const dayTodos = (currentViewMode === 'events') ? [] : todos.filter(t => t.date === ds && visibleCategories.has(t.catId));
+
+          const headerDiv = document.createElement('div');
+          headerDiv.className = 'day-header-row';
+
+          const numSpan = document.createElement('div');
+          numSpan.className = 'day-num' + (ds === today ? ' today' : '');
+          numSpan.textContent = day.getDate();
+          headerDiv.appendChild(numSpan);
+
+          if (dayTodos.length > 0 && currentViewMode !== 'events') {
+            const doneCount = dayTodos.filter(t => t.completed).length;
+            const badge = document.createElement('div');
+            badge.className = 'todo-badge' + (doneCount === dayTodos.length ? ' all-done' : '');
+            badge.textContent = `✓ ${doneCount}/${dayTodos.length}`;
+            badge.title = `${doneCount} of ${dayTodos.length} to-dos completed`;
+            headerDiv.appendChild(badge);
+          }
+          td.appendChild(headerDiv);
+
+          // ── Render Events ──
+          if (currentViewMode !== 'todos') {
+            dayEvents.sort((a, b) => (a.startTime || "").localeCompare(b.startTime || ""));
+            dayEvents.forEach(ev => {
+              const cat = catById(ev.catId);
+              if (!cat) return;
+              const pill = document.createElement('div');
+              pill.className = 'event-pill';
+              pill.style.background = cat.bg;
+              pill.style.color = cat.color;
+              pill.draggable = true;
+              pill.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', ev.id);
+                e.dataTransfer.effectAllowed = 'move';
+                e.stopPropagation();
+                setTimeout(() => pill.style.opacity = '0.5', 0);
+              });
+              pill.addEventListener('dragend', e => { pill.style.opacity = '1'; });
+              const timeStr = formatTimeRange(ev.startTime, ev.endTime);
+              pill.title = `${cat.name}: ${ev.title}${timeStr ? ' (' + timeStr + ')' : ''}\nClick to edit`;
+              const timeHtml = timeStr ? `<div class="pill-time">${timeStr}</div>` : '';
+              const linkHtml = ev.url ? `<a href="${ev.url}" target="_blank" class="pill-link" title="Open Link" onclick="event.stopPropagation()">🔗</a>` : '';
+              pill.innerHTML = `<div class="pill-content">${timeHtml}<div class="pill-text">${ev.title || cat.name} ${linkHtml}</div></div><div class="pill-del" data-id="${ev.id}">✕</div>`;
+
+              pill.addEventListener('click', e => {
+                if (e.target.closest('.pill-del')) return;
+                e.stopPropagation();
+                openEditModal(ev.id);
+              });
+              pill.querySelector('.pill-del').addEventListener('click', e => {
+                e.stopPropagation();
+                openDeleteModal(ev.id);
+              });
+              td.appendChild(pill);
+            });
+          }
+
+          // ── Render To-Dos ──
+          if (currentViewMode !== 'events') {
+            dayTodos.forEach(t => {
+              const cat = catById(t.catId);
+              if (!cat) return;
+              const pill = document.createElement('div');
+              pill.className = 'todo-pill' + (t.completed ? ' completed' : '');
+              pill.style.background = cat.bg;
+              pill.style.color = cat.color;
+              pill.draggable = true;
+              pill.dataset.todoId = t.id;
+              pill.addEventListener('dragstart', e => {
+                draggedTodoId = t.id;
+                e.dataTransfer.setData('text/todo-id', t.id);
+                e.dataTransfer.effectAllowed = 'move';
+                e.stopPropagation();
+                setTimeout(() => pill.style.opacity = '0.4', 0);
+              });
+              pill.addEventListener('dragover', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+                const rect = pill.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                if (e.clientY < midY) {
+                  pill.style.borderTop = '2px solid #6c5ce7';
+                  pill.style.borderBottom = '';
+                } else {
+                  pill.style.borderBottom = '2px solid #6c5ce7';
+                  pill.style.borderTop = '';
+                }
+              });
+              pill.addEventListener('dragleave', e => {
+                pill.style.borderTop = '';
+                pill.style.borderBottom = '';
+              });
+              pill.addEventListener('drop', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                pill.style.borderTop = '';
+                pill.style.borderBottom = '';
+                const srcId = draggedTodoId || e.dataTransfer.getData('text/todo-id');
+                if (srcId && srcId !== t.id) {
+                  const rect = pill.getBoundingClientRect();
+                  const insertAfter = e.clientY >= (rect.top + rect.height / 2);
+                  reorderTodoItem(srcId, t.id, insertAfter, ds);
+                }
+                draggedTodoId = null;
+              });
+              pill.addEventListener('dragend', e => {
+                draggedTodoId = null;
+                pill.style.opacity = t.completed ? '0.65' : '1';
+                document.querySelectorAll('.todo-pill').forEach(el => {
+                  el.style.borderTop = '';
+                  el.style.borderBottom = '';
+                });
+              });
+              const linkHtml = t.url ? `<a href="${t.url}" target="_blank" class="pill-link" title="Open Link" onclick="event.stopPropagation()">🔗</a>` : '';
+              pill.title = `To-Do (${cat.name}): ${t.title}\nClick to edit, click checkbox to toggle`;
+              pill.innerHTML = `
+                <div class="todo-checkbox" title="Toggle complete"></div>
+                <div class="todo-text">${t.title || cat.name} ${linkHtml}</div>
+                <div class="pill-del" data-todo-id="${t.id}">✕</div>
+              `;
+              pill.querySelector('.todo-checkbox').addEventListener('click', e => {
+                toggleTodoStatus(t.id, e);
+              });
+              pill.addEventListener('click', e => {
+                if (e.target.closest('.pill-del') || e.target.closest('.todo-checkbox')) return;
+                e.stopPropagation();
+                openEditTodoModal(t.id);
+              });
+              pill.querySelector('.pill-del').addEventListener('click', e => {
+                e.stopPropagation();
+                openDeleteTodoModal(t.id);
+              });
+              td.appendChild(pill);
+            });
+          }
+
+          td.addEventListener('click', e => {
+            if (e.target.closest('.event-pill') || e.target.closest('.todo-pill')) return;
+            openAddModal(ds);
+          });
+          tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+        cursor.setDate(cursor.getDate() + 7);
+        weekNum++;
+      }
+    }
+
+    function reorderTodoItem(sourceId, targetId, insertAfter, targetDate) {
+      const srcIdx = todos.findIndex(t => t.id === sourceId);
+      if (srcIdx === -1) return;
+      const [srcItem] = todos.splice(srcIdx, 1);
+      srcItem.date = targetDate;
+      const tgtIdx = todos.findIndex(t => t.id === targetId);
+      if (tgtIdx === -1) {
+        todos.push(srcItem);
+      } else {
+        const insertIdx = insertAfter ? tgtIdx + 1 : tgtIdx;
+        todos.splice(insertIdx, 0, srcItem);
+      }
+      saveTodoReorder();
+      renderCalendar();
+    }
+
+    async function saveTodoReorder() {
+      const items = todos.map((t, idx) => ({
+        todo_id: t.id,
+        sort_order: idx,
+        date: t.date,
+      }));
+      try {
+        await apiFetch('/todo/reorder/', {
+          method: 'POST',
+          body: JSON.stringify({ items }),
+        });
+      } catch (err) {
+        console.error('Failed to save todo reorder:', err);
+      }
+    }
+
+    /* ────────────────────────────────────────────────────
+       ADD / EDIT EVENT AND TO-DO
+       ──────────────────────────────────────────────────── */
+    function switchModalType(type) {
+      modalItemType = type;
+      const eventTab = document.getElementById('tabTypeEvent');
+      const todoTab = document.getElementById('tabTypeTodo');
+      const timeRow = document.querySelector('#addModal .time-row');
+      const endDateGroup = document.getElementById('evtEndDate').closest('.form-group');
+      const recurrenceGroup = document.getElementById('evtRecurrence').closest('.form-group');
+      const titleLabel = document.querySelector('label[for="evtTitle"]');
+      const titleInput = document.getElementById('evtTitle');
+
+      if (type === 'event') {
+        if (eventTab) eventTab.classList.add('active');
+        if (todoTab) todoTab.classList.remove('active');
+        if (timeRow) timeRow.style.display = '';
+        if (endDateGroup) endDateGroup.style.display = '';
+        if (recurrenceGroup) recurrenceGroup.style.display = '';
+        if (titleLabel) titleLabel.textContent = 'Event Title';
+        if (titleInput) titleInput.placeholder = 'e.g. Team meeting, Deadline…';
+        document.getElementById('addModalTitle').textContent = editingEventId ? 'Edit Event' : 'Add Event';
+        document.getElementById('addModalBtn').textContent = editingEventId ? 'Save Changes' : 'Add Event';
+      } else {
+        if (todoTab) todoTab.classList.add('active');
+        if (eventTab) eventTab.classList.remove('active');
+        if (timeRow) timeRow.style.display = 'none';
+        if (endDateGroup) endDateGroup.style.display = 'none';
+        if (recurrenceGroup) recurrenceGroup.style.display = 'none';
+        if (titleLabel) titleLabel.textContent = 'Task Description';
+        if (titleInput) titleInput.placeholder = 'e.g. Read Chapter 4, Submit draft…';
+        document.getElementById('addModalTitle').textContent = editingTodoId ? 'Edit To-Do Task' : 'Add To-Do Task';
+        document.getElementById('addModalBtn').textContent = editingTodoId ? 'Save Changes' : 'Add Task';
+      }
+    }
+
+    function openAddModal(ds) {
+      editingEventId = null;
+      editingTodoId = null;
+      pendingDate = ds;
+      const d = parseDate(ds);
+      const typeTabs = document.getElementById('modalTypeTabs');
+      if (typeTabs) typeTabs.style.display = 'flex';
+      document.getElementById('addModalDate').textContent =
+        `${DAYS[((d.getDay() + 6) % 7)]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+      document.getElementById('evtDate').value = ds;
+      document.getElementById('evtTitle').value = '';
+      document.getElementById('evtUrl').value = '';
+      document.getElementById('evtEndDate').value = '';
+      document.getElementById('evtCategory').selectedIndex = 0;
+      document.getElementById('evtRecurrence').value = 'none';
+      document.getElementById('evtStartTime').value = '';
+      document.getElementById('evtEndTime').value = '';
+      document.getElementById('editScopeGroup').style.display = 'none';
+      switchModalType(currentViewMode === 'todos' ? 'todo' : 'event');
+      openModal('addModal');
+      setTimeout(() => document.getElementById('evtTitle').focus(), 150);
+    }
+
+    function openEditModal(evId) {
+      const ev = events.find(e => e.id === evId);
+      if (!ev) return;
+      editingEventId = evId;
+      editingTodoId = null;
+      pendingDate = ev.date;
+      const typeTabs = document.getElementById('modalTypeTabs');
+      if (typeTabs) typeTabs.style.display = 'none';
+      switchModalType('event');
+      const d = parseDate(ev.date);
+      document.getElementById('addModalDate').textContent =
+        `${DAYS[((d.getDay() + 6) % 7)]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+      document.getElementById('evtDate').value = ev.date;
+      document.getElementById('evtTitle').value = ev.title;
+      document.getElementById('evtUrl').value = ev.url || '';
+      document.getElementById('evtCategory').value = ev.catId;
+      document.getElementById('evtStartTime').value = ev.startTime || '';
+      document.getElementById('evtEndTime').value = ev.endTime || '';
+      document.getElementById('evtEndDate').value = '';
+      document.getElementById('evtRecurrence').value = 'none';
+
+      const seriesEvents = ev.seriesId ? events.filter(e => e.seriesId === ev.seriesId) : [];
+      if (seriesEvents.length > 1) {
+        document.getElementById('editScopeGroup').style.display = '';
+        document.querySelector('input[name="editScope"][value="single"]').checked = true;
+      } else {
+        document.getElementById('editScopeGroup').style.display = 'none';
+      }
+
+      openModal('addModal');
+      setTimeout(() => document.getElementById('evtTitle').focus(), 150);
+    }
+
+    function openEditTodoModal(todoId) {
+      const t = todos.find(x => x.id === todoId);
+      if (!t) return;
+      editingTodoId = todoId;
+      editingEventId = null;
+      pendingDate = t.date;
+      const typeTabs = document.getElementById('modalTypeTabs');
+      if (typeTabs) typeTabs.style.display = 'none';
+      switchModalType('todo');
+      const d = parseDate(t.date);
+      document.getElementById('addModalDate').textContent =
+        `${DAYS[((d.getDay() + 6) % 7)]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+      document.getElementById('evtDate').value = t.date;
+      document.getElementById('evtTitle').value = t.title;
+      document.getElementById('evtUrl').value = t.url || '';
+      document.getElementById('evtCategory').value = t.catId;
+      document.getElementById('editScopeGroup').style.display = 'none';
+      openModal('addModal');
+      setTimeout(() => document.getElementById('evtTitle').focus(), 150);
+    }
+
+    async function toggleTodoStatus(todoId, e) {
+      if (e) e.stopPropagation();
+      const t = todos.find(x => x.id === todoId);
+      if (t) {
+        t.completed = !t.completed;
+        try {
+          await apiFetch(`/todo/toggle/${todoId}/`, { method: 'POST' });
+        } catch (err) {}
+        renderCalendar();
+      }
+    }
+
+    async function confirmAdd() {
+      const catId = document.getElementById('evtCategory').value;
+      const title = document.getElementById('evtTitle').value.trim();
+      const url = document.getElementById('evtUrl').value.trim();
+
+      const customDateVal = document.getElementById('evtDate').value;
+      if (customDateVal) pendingDate = customDateVal;
+      if (!pendingDate) return;
+
+      // ── TO-DO MODE ──
+      if (modalItemType === 'todo') {
+        if (editingTodoId) {
+          const t = todos.find(x => x.id === editingTodoId);
+          if (t) {
+            t.catId = catId;
+            t.title = title || catById(catId).name;
+            t.url = url || '';
+            try {
+              await apiFetch('/todo/save/', {
+                method: 'POST',
+                body: JSON.stringify({ todo_id: t.id, date: t.date, catId: t.catId, title: t.title, url: t.url, completed: t.completed, sort_order: t.sort_order || 0 }),
+              });
+            } catch (err) {}
+          }
+          editingTodoId = null;
+          renderCalendar();
+          closeModal('addModal');
+          toast('To-Do task updated', 'success');
+          return;
+        }
+
+        const newTodo = {
+          id: uid(),
+          date: pendingDate,
+          catId,
+          title: title || catById(catId).name,
+          url: url || '',
+          completed: false,
+          sort_order: todos.length,
+        };
+        todos.push(newTodo);
+        try {
+          await apiFetch('/todo/save/', {
+            method: 'POST',
+            body: JSON.stringify({ todo_id: newTodo.id, date: newTodo.date, catId: newTodo.catId, title: newTodo.title, url: newTodo.url, completed: false, sort_order: newTodo.sort_order }),
+          });
+        } catch (err) {}
+        renderCalendar();
+        closeModal('addModal');
+        toast('To-Do task added', 'success');
+        return;
+      }
+
+      // ── EVENT MODE ──
+      const startTime = document.getElementById('evtStartTime').value;
+      const endTime = document.getElementById('evtEndTime').value;
+
+      if (editingEventId) {
+        const ev = events.find(e => e.id === editingEventId);
+        if (ev) {
+          const editScope = document.getElementById('editScopeGroup').style.display !== 'none'
+            ? document.querySelector('input[name="editScope"]:checked').value
+            : 'single';
+
+          if (ev.seriesId && editScope === 'series') {
+            const seriesEvents = events.filter(e => e.seriesId === ev.seriesId);
+            for (const se of seriesEvents) {
+              se.catId = catId;
+              se.title = title || catById(catId).name;
+              se.url = url || '';
+              se.startTime = startTime || '';
+              se.endTime = endTime || '';
+              apiFetch('/event/save/', {
+                method: 'POST',
+                body: JSON.stringify({ event_id: se.id, series_id: se.seriesId, date: se.date, catId: se.catId, title: se.title, url: se.url, startTime: se.startTime, endTime: se.endTime }),
+              }).catch(() => {});
+            }
+          } else {
+            ev.catId = catId;
+            ev.title = title || catById(catId).name;
+            ev.url = url || '';
+            ev.startTime = startTime || '';
+            ev.endTime = endTime || '';
+            try {
+              await apiFetch('/event/save/', {
+                method: 'POST',
+                body: JSON.stringify({ event_id: ev.id, series_id: ev.seriesId, date: ev.date, catId: ev.catId, title: ev.title, url: ev.url, startTime: ev.startTime, endTime: ev.endTime }),
+              });
+            } catch (err) {}
+          }
+        }
+        editingEventId = null;
+        renderCalendar();
+        closeModal('addModal');
+        toast('Event updated', 'success');
+        return;
+      }
+
+      // ── ADD EVENT ──
+      const endDateVal = document.getElementById('evtEndDate').value;
+      const recurrence = document.getElementById('evtRecurrence').value;
+      const startDate = parseDate(pendingDate);
+      const endDate = endDateVal ? parseDate(endDateVal) : startDate;
+
+      if (endDate < startDate) {
+        toast('End date cannot be before start date', 'warn');
+        return;
+      }
+
+      const stepDays = recurrence === 'weekly' ? 7 : recurrence === 'fortnightly' ? 14 : 0;
+      let totalAdded = 0;
+      const seriesId = uid();
+      let occurrenceStart = new Date(startDate);
+      const calendarEndDate = getEndDate();
+      const calendarStartDate = getStartDate();
+
+      while (occurrenceStart <= calendarEndDate) {
+        const duration = Math.round((endDate - startDate) / 86400000);
+        for (let d = 0; d <= duration; d++) {
+          const day = addDays(occurrenceStart, d);
+          if (day > calendarEndDate) break;
+          if (day >= calendarStartDate) {
+            const newEvent = {
+              id: uid(),
+              seriesId: seriesId,
+              date: dateStr(day),
+              catId,
+              title: title || catById(catId).name,
+              url: url || '',
+              startTime: startTime || '',
+              endTime: endTime || '',
+            };
+            events.push(newEvent);
+            apiFetch('/event/save/', {
+              method: 'POST',
+              body: JSON.stringify({ event_id: newEvent.id, series_id: newEvent.seriesId, date: newEvent.date, catId: newEvent.catId, title: newEvent.title, url: newEvent.url, startTime: newEvent.startTime, endTime: newEvent.endTime }),
+            }).catch(() => {});
+            totalAdded++;
+          }
+        }
+        if (stepDays === 0) break;
+        occurrenceStart = addDays(occurrenceStart, stepDays);
+      }
+
+      renderCalendar();
+      closeModal('addModal');
+      const label = recurrence === 'weekly' ? ' (weekly)' : recurrence === 'fortnightly' ? ' (fortnightly)' : '';
+      toast(`${totalAdded} event(s) added${label}`, 'success');
+    }
+
+    document.getElementById('evtTitle').addEventListener('keydown', e => {
+      if (e.key === 'Enter') confirmAdd();
+    });
+
+    /* ────────────────────────────────────────────────────
+       DELETE ITEM
+       ──────────────────────────────────────────────────── */
+    function openDeleteModal(evId) {
+      pendingDelId = evId;
+      pendingDelTodoId = null;
+      const ev = events.find(e => e.id === evId);
+      if (!ev) return;
+      const cat = catById(ev.catId);
+      const timeInfo = formatTimeRange(ev.startTime, ev.endTime);
+      document.getElementById('delModalInfo').innerHTML =
+        `Delete event <strong style="color:${cat.color}">${ev.title || cat.name}</strong>${timeInfo ? ' <span style="opacity:.7">(' + timeInfo + ')</span>' : ''} on <strong>${ev.date}</strong>?`;
+
+      const seriesEvents = ev.seriesId ? events.filter(e => e.seriesId === ev.seriesId) : [];
+      if (seriesEvents.length > 1) {
+        document.getElementById('delScopeGroup').style.display = 'block';
+        document.querySelector('input[name="delScope"][value="single"]').checked = true;
+      } else {
+        document.getElementById('delScopeGroup').style.display = 'none';
+      }
+      openModal('delModal');
+    }
+
+    function openDeleteTodoModal(todoId) {
+      pendingDelTodoId = todoId;
+      pendingDelId = null;
+      const t = todos.find(x => x.id === todoId);
+      if (!t) return;
+      const cat = catById(t.catId);
+      document.getElementById('delModalInfo').innerHTML =
+        `Delete To-Do task <strong style="color:${cat.color}">${t.title || cat.name}</strong> on <strong>${t.date}</strong>?`;
+      document.getElementById('delScopeGroup').style.display = 'none';
+      openModal('delModal');
+    }
+
+    async function confirmDelete() {
+      if (pendingDelTodoId) {
+        todos = todos.filter(t => t.id !== pendingDelTodoId);
+        try {
+          await apiFetch(`/todo/delete/${pendingDelTodoId}/`, { method: 'POST' });
+        } catch (err) {}
+        pendingDelTodoId = null;
+        renderCalendar();
+        closeModal('delModal');
+        toast('To-Do task deleted', 'warn');
+        return;
+      }
+
+      if (pendingDelId) {
+        const ev = events.find(e => e.id === pendingDelId);
+        if (ev) {
+          const isSeries = document.getElementById('delScopeGroup').style.display !== 'none' &&
+            document.querySelector('input[name="delScope"]:checked').value === 'series';
+
+          if (isSeries && ev.seriesId) {
+            events = events.filter(e => e.seriesId !== ev.seriesId);
+            try {
+              await apiFetch(`/event/delete-series/${ev.seriesId}/`, { method: 'POST' });
+            } catch (err) {}
+          } else {
+            events = events.filter(e => e.id !== pendingDelId);
+            try {
+              await apiFetch(`/event/delete/${pendingDelId}/`, { method: 'POST' });
+            } catch (err) {}
+          }
+        }
+        pendingDelId = null;
+        renderCalendar();
+        closeModal('delModal');
+        toast('Event deleted', 'warn');
+      }
+    }
+
+    /* ────────────────────────────────────────────────────
+       CLEAR ALL ITEMS (Requires Superuser Password)
+       ──────────────────────────────────────────────────── */
+    function openClearAllModal() {
+      document.getElementById('clearAllPassword').value = '';
+      document.getElementById('clearAllError').textContent = '';
+      openModal('clearAllModal');
+      setTimeout(() => document.getElementById('clearAllPassword').focus(), 150);
+    }
+
+    async function confirmClearAll() {
+      const password = document.getElementById('clearAllPassword').value.trim();
+      const errDiv = document.getElementById('clearAllError');
+      errDiv.textContent = '';
+
+      if (!password) {
+        errDiv.textContent = 'Superuser password is required.';
+        return;
+      }
+
+      try {
+        const res = await apiFetch('/clear-all/', {
+          method: 'POST',
+          body: JSON.stringify({ password })
+        });
+        if (res && res.status === 'success') {
+          events = [];
+          todos = [];
+          renderCalendar();
+          closeModal('clearAllModal');
+          const totalCleared = (res.deleted_events || 0) + (res.deleted_todos || 0);
+          toast(`${totalCleared} item(s) cleared`, 'warn');
+        } else {
+          errDiv.textContent = res.message || 'Authorization failed.';
+        }
+      } catch (err) {
+        errDiv.textContent = err.message || 'Invalid superuser password or error.';
+      }
+    }
+
+    /* ────────────────────────────────────────────────────
+       PNG EXPORT (html2canvas)
+       ──────────────────────────────────────────────────── */
+    function exportPNG() {
+      if (typeof html2canvas === 'undefined') {
+        toast('PNG library not loaded. Check internet connection.', 'warn');
+        return;
+      }
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const fileName = `${yyyy}${mm}${dd}_${hh}${min}_schedulerpic.png`;
+
+      toast('Generating PNG...', 'info');
+
+      // Offscreen container with fixed width (1280px) to prevent width distortion
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'position:absolute;left:-9999px;top:0;background:#fff;padding:16px 20px 24px;width:1280px;box-sizing:border-box;font-family:Inter,sans-serif;';
+
+      // Clone legend
+      const legendClone = document.getElementById('legendBar').cloneNode(true);
+      legendClone.style.cssText = 'border-radius:10px 10px 0 0; margin-bottom:0; box-shadow:none; border:1px solid #e2e6ea; border-bottom:none;';
+      wrapper.appendChild(legendClone);
+
+      // Clone calendar
+      const calClone = document.querySelector('.calendar-wrap').cloneNode(true);
+      calClone.style.margin = '0';
+      calClone.style.padding = '0';
+      calClone.style.maxWidth = '100%';
+
+      // Hide delete buttons and enforce multiline linebreaks on all pills/text
+      calClone.querySelectorAll('.pill-del').forEach(el => el.style.display = 'none');
+      calClone.querySelectorAll('.todo-text, .pill-text').forEach(el => {
+        el.style.whiteSpace = 'normal';
+        el.style.wordBreak = 'break-word';
+        el.style.overflowWrap = 'break-word';
+      });
+      calClone.querySelectorAll('.event-pill, .todo-pill').forEach(el => {
+        el.style.whiteSpace = 'normal';
+        el.style.wordBreak = 'break-word';
+      });
+
+      wrapper.appendChild(calClone);
+
+      // Add export timestamp footer
+      const footer = document.createElement('div');
+      footer.style.cssText = 'text-align:center; font-size:11px; color:#999; padding:12px 0 0; font-family:Inter,sans-serif;';
+      footer.textContent = `Exported on ${yyyy}-${mm}-${dd} ${hh}:${min}`;
+      wrapper.appendChild(footer);
+
+      document.body.appendChild(wrapper);
+
+      html2canvas(wrapper, { scale: 2, useCORS: true, width: 1280 }).then(canvas => {
+        document.body.removeChild(wrapper);
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        toast('PNG exported successfully', 'success');
+      }).catch(err => {
+        if (wrapper.parentNode) document.body.removeChild(wrapper);
+        console.error('Error generating PNG:', err);
+        toast('Error exporting PNG', 'warn');
+      });
+    }
+
+    /* ────────────────────────────────────────────────────
+       TIME HELPERS
+       ──────────────────────────────────────────────────── */
+    function buildTimeOptions() {
+      const startSel = document.getElementById('evtStartTime');
+      const endSel = document.getElementById('evtEndTime');
+      for (let h = 7; h <= 23; h++) {
+        for (let m = 0; m < 60; m += 10) {
+          const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+          const ampm = h < 12 ? 'AM' : 'PM';
+          const label = `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
+          const val = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          startSel.appendChild(new Option(label, val));
+          endSel.appendChild(new Option(label, val));
+        }
+      }
+    }
+
+    function formatTimeRange(start, end) {
+      if (!start && !end) return '';
+      const fmt = v => {
+        if (!v) return '';
+        const [hh, mm] = v.split(':').map(Number);
+        const h12 = hh === 0 ? 12 : hh > 12 ? hh - 12 : hh;
+        const ampm = hh < 12 ? 'AM' : 'PM';
+        return `${h12}:${String(mm).padStart(2, '0')}${ampm}`;
+      };
+      if (start && end) return `${fmt(start)}–${fmt(end)}`;
+      return fmt(start || end);
+    }
+
+    /* ────────────────────────────────────────────────────
+       SETTINGS MODAL MANAGEMENT & MONDAY-FIRST SELECTION TOOL
+       ──────────────────────────────────────────────────── */
+    let tempBreaks = [];
+    let currentMondayCalDate = new Date(2026, 6, 1);
+    let activeMondayCalTarget = null;
+    let activeMondayCalSnapMode = 'auto';
+
+    function populateMondaySelect(selectEl, selectedVal, isSunday = false) {
+      if (!selectEl) return;
+      selectEl.innerHTML = '';
+      let baseMonday = getMonday(new Date(2026, 0, 1));
+      let baseTarget = isSunday ? addDays(baseMonday, 6) : baseMonday;
+      const targetVal = selectedVal || dateStr(baseTarget);
+      for (let w = -26; w < 104; w++) {
+        const d = addDays(baseTarget, w * 7);
+        const ds = dateStr(d);
+        const dayLabel = isSunday ? 'Sun' : 'Mon';
+        const label = `${dayLabel}, ${MONTHS[d.getMonth()]} ${String(d.getDate()).padStart(2, '0')}, ${d.getFullYear()}`;
+        selectEl.appendChild(new Option(label, ds));
+      }
+      selectEl.value = targetVal;
+      if (!selectEl.value && selectEl.options.length > 0) selectEl.selectedIndex = 0;
+    }
+
+    function openSettingsModal() {
+      populateMondaySelect(document.getElementById('cfgStartDateSelect'), appSettings.startDate || '2026-07-06', false);
+      populateMondaySelect(document.getElementById('cfgEndDateSelect'), appSettings.endDate || '2026-10-18', true);
+      tempBreaks = JSON.parse(JSON.stringify(appSettings.breaks || []));
+      renderSettingsBreakList();
+      openModal('settingsModal');
+    }
+
+    function renderSettingsBreakList() {
+      const container = document.getElementById('cfgBreakList');
+      container.innerHTML = '';
+      if (tempBreaks.length === 0) {
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:10px;">No break periods added. Click "+ Add Break Period" below to add one.</div>';
+        return;
+      }
+      tempBreaks.forEach((b, idx) => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background: #f8f9fb; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; position: relative;';
+        item.innerHTML = `
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" value="${(b.name || '').replace(/"/g, '&quot;')}" placeholder="Break Name (e.g. Mid-Tri Break)"
+              oninput="tempBreaks[${idx}].name = this.value"
+              style="flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.82rem; font-weight: 600;" />
+            <button type="button" onclick="deleteBreakPeriodInput(${idx})" style="background: #fff0f0; border: 1px solid #ffcdd2; color: #e63946; cursor: pointer; padding: 6px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center;" title="Delete Break">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px;">Start Date (Monday)</label>
+              <div style="display: flex; gap: 4px;">
+                <select id="bkStart_${idx}" style="flex:1; padding:5px; border:1px solid var(--border); border-radius:4px; font-size:0.78rem;" onchange="tempBreaks[${idx}].startDate = this.value"></select>
+                <button type="button" class="btn" onclick="openMondayCalPicker('bkStart_${idx}', this)" style="padding: 4px 8px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size:0.85rem;" title="Open Monday Calendar">📅</button>
+              </div>
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px;">End Date (Sunday)</label>
+              <div style="display: flex; gap: 4px;">
+                <select id="bkEnd_${idx}" style="flex:1; padding:5px; border:1px solid var(--border); border-radius:4px; font-size:0.78rem;" onchange="tempBreaks[${idx}].endDate = this.value"></select>
+                <button type="button" class="btn" onclick="openMondayCalPicker('bkEnd_${idx}', this)" style="padding: 4px 8px; background:#f0f3ff; color:#6c5ce7; border:1px solid #d4e8f5; font-size:0.85rem;" title="Open Monday Calendar">📅</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(item);
+        populateMondaySelect(document.getElementById(`bkStart_${idx}`), b.startDate || '2026-08-17', false);
+        populateMondaySelect(document.getElementById(`bkEnd_${idx}`), b.endDate || '2026-08-23', true);
+      });
+    }
+
+    function addBreakPeriodInput() {
+      const lastBreak = tempBreaks[tempBreaks.length - 1];
+      let defaultStart = '2026-08-17';
+      let defaultEnd = '2026-08-23';
+      if (lastBreak && lastBreak.endDate) {
+        const nextMon = addDays(parseDate(lastBreak.endDate), 1);
+        const nextSun = addDays(nextMon, 6);
+        defaultStart = dateStr(nextMon);
+        defaultEnd = dateStr(nextSun);
+      }
+      tempBreaks.push({ id: 'b_' + uid(), name: 'School Break', startDate: defaultStart, endDate: defaultEnd });
+      renderSettingsBreakList();
+    }
+
+    function deleteBreakPeriodInput(index) {
+      tempBreaks.splice(index, 1);
+      renderSettingsBreakList();
+    }
+
+    async function saveSettingsAndClose() {
+      const sDate = document.getElementById('cfgStartDateSelect').value;
+      const eDate = document.getElementById('cfgEndDateSelect').value;
+      if (!sDate || !eDate) {
+        toast('Please specify valid start and end dates', 'warn');
+        return;
+      }
+      const alignedStart = dateStr(getMonday(parseDate(sDate)));
+      const alignedEnd = dateStr(getSunday(parseDate(eDate)));
+      if (parseDate(alignedEnd) < parseDate(alignedStart)) {
+        toast('End date cannot be before start date', 'warn');
+        return;
+      }
+      appSettings.startDate = alignedStart;
+      appSettings.endDate = alignedEnd;
+      appSettings.breaks = tempBreaks.filter(b => b.startDate && b.endDate).map(b => {
+        const bStart = dateStr(getMonday(parseDate(b.startDate)));
+        const bEnd = dateStr(getSunday(parseDate(b.endDate)));
+        return { ...b, startDate: bStart, endDate: bEnd < bStart ? bStart : bEnd };
+      });
+
+      try {
+        await apiFetch('/settings/save/', {
+          method: 'POST',
+          body: JSON.stringify({
+            settings: { startDate: appSettings.startDate, endDate: appSettings.endDate, viewMode: currentViewMode },
+            breaks: appSettings.breaks.map(b => ({ id: b.id, name: b.name, startDate: b.startDate, endDate: b.endDate })),
+          }),
+        });
+      } catch (err) {
+        toast('Failed to save settings', 'warn');
+      }
+
+      updateHeaderDateRange();
+      renderCalendar();
+      closeModal('settingsModal');
+      closeMondayCalPopover();
+      toast('Calendar settings saved', 'success');
+    }
+
+    /* ── Monday-First Popover Calendar Picker Logic ── */
+    function openMondayCalPicker(targetId, btnEl, snapMode = 'auto') {
+      activeMondayCalTarget = targetId;
+      activeMondayCalSnapMode = snapMode;
+      const popover = document.getElementById('mondayCalPopover');
+      const rect = btnEl.getBoundingClientRect();
+      popover.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+      popover.style.left = Math.min(rect.left + window.scrollX, window.innerWidth - 300) + 'px';
+      popover.classList.add('open');
+      let targetVal = '';
+      const el = document.getElementById(targetId);
+      if (el) targetVal = el.value;
+      if (targetVal) currentMondayCalDate = parseDate(targetVal);
+      else currentMondayCalDate = new Date(2026, 6, 1);
+      renderMondayCalGrid();
+    }
+
+    function closeMondayCalPopover() {
+      const popover = document.getElementById('mondayCalPopover');
+      if (popover) popover.classList.remove('open');
+    }
+
+    function navMondayCal(monthDelta) {
+      currentMondayCalDate.setMonth(currentMondayCalDate.getMonth() + monthDelta);
+      renderMondayCalGrid();
+    }
+
+    function renderMondayCalGrid() {
+      const title = document.getElementById('mondayCalTitle');
+      const grid = document.getElementById('mondayCalGrid');
+      if (!title || !grid) return;
+      const y = currentMondayCalDate.getFullYear();
+      const m = currentMondayCalDate.getMonth();
+      title.textContent = `${MONTHS[m]} ${y}`;
+      grid.innerHTML = '';
+      DAYS.forEach(dayName => {
+        const head = document.createElement('div');
+        head.className = 'day-head';
+        head.textContent = dayName;
+        grid.appendChild(head);
+      });
+      const firstOfMonth = new Date(y, m, 1);
+      const startOffset = (firstOfMonth.getDay() + 6) % 7;
+      let startDate = new Date(y, m, 1 - startOffset);
+      let targetVal = '';
+      if (activeMondayCalTarget) {
+        const el = document.getElementById(activeMondayCalTarget);
+        if (el) targetVal = el.value;
+      }
+      for (let i = 0; i < 42; i++) {
+        const cellDate = addDays(startDate, i);
+        const ds = dateStr(cellDate);
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        if (cellDate.getMonth() !== m) cell.classList.add('other-month');
+        if (ds === targetVal) cell.classList.add('selected');
+        cell.textContent = cellDate.getDate();
+        cell.addEventListener('click', e => {
+          e.stopPropagation();
+          selectMondayCalDate(ds);
+        });
+        grid.appendChild(cell);
+      }
+    }
+
+    function selectMondayCalDate(ds) {
+      if (!activeMondayCalTarget) return;
+      const targetEl = document.getElementById(activeMondayCalTarget);
+      if (targetEl) {
+        let alignedDate = ds;
+        if (activeMondayCalSnapMode === 'exact') {
+          alignedDate = ds;
+        } else if (activeMondayCalSnapMode === 'monday') {
+          alignedDate = dateStr(getMonday(parseDate(ds)));
+        } else if (activeMondayCalSnapMode === 'sunday') {
+          alignedDate = dateStr(getSunday(parseDate(ds)));
+        } else {
+          const isSunday = activeMondayCalTarget.includes('End') || activeMondayCalTarget.includes('bkEnd');
+          alignedDate = isSunday ? dateStr(getSunday(parseDate(ds))) : dateStr(getMonday(parseDate(ds)));
+        }
+        targetEl.value = alignedDate;
+        if (activeMondayCalTarget === 'evtDate') {
+          pendingDate = alignedDate;
+          const d = parseDate(pendingDate);
+          document.getElementById('addModalDate').textContent =
+            `${DAYS[((d.getDay() + 6) % 7)]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+        }
+        if (activeMondayCalTarget.startsWith('bkStart_')) {
+          const idx = +activeMondayCalTarget.split('_')[1];
+          if (tempBreaks[idx]) tempBreaks[idx].startDate = alignedDate;
+        } else if (activeMondayCalTarget.startsWith('bkEnd_')) {
+          const idx = +activeMondayCalTarget.split('_')[1];
+          if (tempBreaks[idx]) tempBreaks[idx].endDate = alignedDate;
+        }
+        toast(`Selected ${alignedDate}`, 'info');
+      }
+      closeMondayCalPopover();
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#mondayCalPopover') && !e.target.closest('.monday-cal-popover') && !e.target.closest('button[onclick*="openMondayCalPicker"]')) {
+        closeMondayCalPopover();
+      }
+    });
+
+    /* ────────────────────────────────────────────────────
+       INITIALISE
+       ──────────────────────────────────────────────────── */
+    async function init() {
+      const loaded = await loadAllData();
+
+      if (!loaded || CATEGORIES.length === 0) {
+        // Seed default categories if DB is empty
+        CATEGORIES = [...DEFAULT_CATEGORIES];
+        try {
+          await apiFetch('/categories/save/', {
+            method: 'POST',
+            body: JSON.stringify({ categories: CATEGORIES }),
+          });
+        } catch (err) {}
+
+        // Seed default settings & breaks
+        try {
+          await apiFetch('/settings/save/', {
+            method: 'POST',
+            body: JSON.stringify({
+              settings: { startDate: DEFAULT_SETTINGS.startDate, endDate: DEFAULT_SETTINGS.endDate, viewMode: 'events' },
+              breaks: DEFAULT_SETTINGS.breaks.map(b => ({ id: b.id, name: b.name, startDate: b.startDate, endDate: b.endDate })),
+            }),
+          });
+        } catch (err) {}
+
+        visibleCategories = new Set(CATEGORIES.map(c => c.id));
+      }
+
+      updateHeaderDateRange();
+      buildLegend();
+      buildTimeOptions();
+      buildCategorySelect();
+      renderCalendar();
+      updateDjangoStatus('Django Backend', true);
+    }
+
+    init();
+  </script>
+</body>
+
+</html>

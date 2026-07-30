@@ -365,99 +365,124 @@ def import_data(request):
     if blocked:
         return blocked
 
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+        import uuid
 
-    imported_events = 0
-    imported_todos = 0
+        imported_events = 0
+        imported_todos = 0
 
-    with transaction.atomic():
-        # Import categories
-        categories = data.get('categories', [])
-        if categories:
-            for idx, cat in enumerate(categories):
-                Category.objects.update_or_create(
-                    cat_id=cat.get('id', ''),
-                    defaults={
-                        'name': cat.get('name', 'Unnamed'),
-                        'color': cat.get('color', '#666666'),
-                        'bg': cat.get('bg', '#f0f0f0'),
-                        'sort_order': idx,
-                    }
-                )
-
-        # Import events
-        events_data = data.get('events', [])
-        for e in events_data:
-            cat_id = e.get('catId') or e.get('category_id', '')
-            cat = Category.objects.filter(cat_id=cat_id).first()
-            if not cat:
-                cat_name = cat_id if cat_id else 'General'
-                cat, _ = Category.objects.get_or_create(
-                    cat_id=cat_id or 'general',
-                    defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
-                )
-            Event.objects.update_or_create(
-                event_id=e.get('id') or e.get('event_id', ''),
-                defaults={
-                    'series_id': e.get('seriesId') or e.get('series_id'),
-                    'date': e.get('date'),
-                    'category': cat,
-                    'title': e.get('title', ''),
-                    'url': e.get('url', ''),
-                    'start_time': e.get('startTime') or e.get('start_time', ''),
-                    'end_time': e.get('endTime') or e.get('end_time', ''),
-                }
-            )
-            imported_events += 1
-
-        # Import todos
-        todos_data = data.get('todos', [])
-        for t in todos_data:
-            cat_id = t.get('catId') or t.get('category_id', '')
-            cat = Category.objects.filter(cat_id=cat_id).first()
-            if not cat:
-                cat_name = cat_id if cat_id else 'General'
-                cat, _ = Category.objects.get_or_create(
-                    cat_id=cat_id or 'general',
-                    defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
-                )
-            Todo.objects.update_or_create(
-                todo_id=t.get('id') or t.get('todo_id', ''),
-                defaults={
-                    'date': t.get('date'),
-                    'category': cat,
-                    'title': t.get('title', ''),
-                    'url': t.get('url', ''),
-                    'completed': t.get('completed', False),
-                    'sort_order': t.get('sort_order', 0),
-                }
-            )
-            imported_todos += 1
-
-        # Import settings
-        settings = data.get('settings', {})
-        if isinstance(settings, dict):
-            for key, value in settings.items():
-                if key == 'breaks':
-                    continue  # Handled separately
-                SchedulerSetting.objects.update_or_create(
-                    key=key, defaults={'value': str(value)}
-                )
-
-            # Import breaks from settings
-            breaks = settings.get('breaks', [])
-            if breaks:
-                BreakPeriod.objects.all().delete()
-                for b in breaks:
-                    BreakPeriod.objects.create(
-                        break_id=b.get('id', ''),
-                        name=b.get('name', 'School Break'),
-                        start_date=b.get('startDate'),
-                        end_date=b.get('endDate'),
+        with transaction.atomic():
+            # Import categories
+            categories = data.get('categories', [])
+            if categories:
+                for idx, cat in enumerate(categories):
+                    cid = cat.get('id') or cat.get('cat_id') or cat.get('catId') or ''
+                    if not cid:
+                        continue
+                    Category.objects.update_or_create(
+                        cat_id=cid,
+                        defaults={
+                            'name': cat.get('name', 'Unnamed'),
+                            'color': cat.get('color', '#666666'),
+                            'bg': cat.get('bg', '#f0f0f0'),
+                            'sort_order': idx,
+                        }
                     )
 
-    return JsonResponse({
-        'status': 'success',
-        'imported_events': imported_events,
-        'imported_todos': imported_todos,
-    })
+            # Import events
+            events_data = data.get('events', [])
+            for e in events_data:
+                evt_id = e.get('id') or e.get('event_id') or e.get('eventId')
+                evt_date = e.get('date')
+                if not evt_date:
+                    continue
+                if not evt_id:
+                    evt_id = f"evt_{uuid.uuid4().hex[:8]}"
+
+                cat_id = e.get('catId') or e.get('category_id') or e.get('cat_id') or ''
+                cat = Category.objects.filter(cat_id=cat_id).first()
+                if not cat:
+                    cat_name = cat_id if cat_id else 'General'
+                    cat, _ = Category.objects.get_or_create(
+                        cat_id=cat_id or 'general',
+                        defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
+                    )
+                Event.objects.update_or_create(
+                    event_id=evt_id,
+                    defaults={
+                        'series_id': e.get('seriesId') or e.get('series_id'),
+                        'date': evt_date,
+                        'category': cat,
+                        'title': e.get('title', ''),
+                        'url': e.get('url', ''),
+                        'start_time': e.get('startTime') or e.get('start_time', ''),
+                        'end_time': e.get('endTime') or e.get('end_time', ''),
+                    }
+                )
+                imported_events += 1
+
+            # Import todos
+            todos_data = data.get('todos', [])
+            for t in todos_data:
+                todo_id = t.get('id') or t.get('todo_id') or t.get('todoId')
+                todo_date = t.get('date')
+                if not todo_date:
+                    continue
+                if not todo_id:
+                    todo_id = f"td_{uuid.uuid4().hex[:8]}"
+
+                cat_id = t.get('catId') or t.get('category_id') or t.get('cat_id') or ''
+                cat = Category.objects.filter(cat_id=cat_id).first()
+                if not cat:
+                    cat_name = cat_id if cat_id else 'General'
+                    cat, _ = Category.objects.get_or_create(
+                        cat_id=cat_id or 'general',
+                        defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
+                    )
+                Todo.objects.update_or_create(
+                    todo_id=todo_id,
+                    defaults={
+                        'date': todo_date,
+                        'category': cat,
+                        'title': t.get('title', ''),
+                        'url': t.get('url', ''),
+                        'completed': t.get('completed', False),
+                        'sort_order': t.get('sort_order', 0),
+                    }
+                )
+                imported_todos += 1
+
+            # Import settings
+            settings_data = data.get('settings', {})
+            if isinstance(settings_data, dict):
+                for key, value in settings_data.items():
+                    if key == 'breaks':
+                        continue  # Handled separately
+                    SchedulerSetting.objects.update_or_create(
+                        key=key, defaults={'value': str(value)}
+                    )
+
+                # Import breaks from settings
+                breaks = settings_data.get('breaks', [])
+                if breaks:
+                    BreakPeriod.objects.all().delete()
+                    for b in breaks:
+                        bid = b.get('id') or b.get('break_id') or f"brk_{uuid.uuid4().hex[:8]}"
+                        b_start = b.get('startDate') or b.get('start_date')
+                        b_end = b.get('endDate') or b.get('end_date')
+                        if b_start and b_end:
+                            BreakPeriod.objects.create(
+                                break_id=bid,
+                                name=b.get('name', 'School Break'),
+                                start_date=b_start,
+                                end_date=b_end,
+                            )
+
+        return JsonResponse({
+            'status': 'success',
+            'imported_events': imported_events,
+            'imported_todos': imported_todos,
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

@@ -194,8 +194,7 @@ def trigger_monday_reminder(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
 
-    from django.conf import settings
-    recipient = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
+    recipient = None
     if request.body:
         try:
             data = json.loads(request.body)
@@ -205,11 +204,14 @@ def trigger_monday_reminder(request):
             pass
 
     out = StringIO()
-    call_command('send_monday_reminder', recipient=recipient, stdout=out)
+    if recipient:
+        call_command('send_monday_reminder', recipient=recipient, stdout=out)
+    else:
+        call_command('send_monday_reminder', stdout=out)
 
     return JsonResponse({
         'status': 'success',
-        'message': 'Monday 8:00 AM role rotation update email sent successfully via BCC.'
+        'message': 'Monday 8:00 AM role rotation update email sent successfully.'
     })
 
 

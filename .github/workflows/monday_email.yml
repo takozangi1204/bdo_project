@@ -1,0 +1,15 @@
+name: Send Monday Email Reminder
+
+on:
+  schedule:
+    # Runs every Sunday at 20:00 UTC (which corresponds to Monday 8:00 AM NZST)
+    - cron: '0 20 * * 0'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab for testing
+
+jobs:
+  trigger-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Email Endpoint on Render
+        run: |
+          curl -s -X POST https://bdo-project.onrender.com/role-rotation/api/send-monday-email/

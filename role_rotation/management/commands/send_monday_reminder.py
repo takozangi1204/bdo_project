@@ -94,7 +94,10 @@ class Command(BaseCommand):
         subject = f"[BDO MBUA Project] {current_week} Reminder"
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@bdo.local')
 
-        app_url = "http://127.0.0.1:8000/role_rotation/dashboard/"
+        site_url = os.environ.get('APP_URL') or os.environ.get('SITE_URL') or 'https://bdo-project.onrender.com'
+        if not site_url.startswith('http'):
+            site_url = f"https://{site_url}"
+        app_url = f"{site_url.rstrip('/')}/role_rotation/dashboard/"
 
         from role_rotation.utils import get_weekly_schedule_html, get_weekly_schedule_text
         section3_html = get_weekly_schedule_html()

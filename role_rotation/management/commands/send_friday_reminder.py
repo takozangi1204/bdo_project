@@ -114,11 +114,16 @@ class Command(BaseCommand):
         screenshot_path = os.path.join(settings.BASE_DIR, 'role_rotation_dashboard_temp.png')
         self.stdout.write("Capturing dashboard screenshot...")
         
+        site_url = os.environ.get('APP_URL') or os.environ.get('SITE_URL') or 'https://bdo-project.onrender.com'
+        if not site_url.startswith('http'):
+            site_url = f"https://{site_url}"
+        dashboard_url = f"{site_url.rstrip('/')}/role_rotation/dashboard/"
+
         try:
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
                 page = browser.new_page(viewport={'width': 1280, 'height': 800})
-                page.goto('http://127.0.0.1:8000/role_rotation/dashboard/', wait_until='load', timeout=10000)
+                page.goto(dashboard_url, wait_until='load', timeout=10000)
                 page.screenshot(path=screenshot_path, full_page=True)
                 browser.close()
         except Exception as e:
@@ -141,7 +146,7 @@ This is a reminder of current weekly cadence tasks ({count} total):
 
 {section3_text}
 
-Please check the cadence dashboard for details.
+Please check the cadence dashboard for details: {dashboard_url}
 
 Best regards,
 Weekly Cadence App
@@ -165,6 +170,10 @@ Weekly Cadence App
             <h3>Dashboard View</h3>
             <div style="border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9; display: inline-block;">
               <img src="cid:dashboard_img" alt="Dashboard Screenshot" style="max-width: 100%; height: auto;" />
+            </div>
+            <br><br>
+            <div style="margin-top: 16px; font-size: 13px; color: #636e72;">
+              Check the details: <a href="{dashboard_url}" target="_blank" style="color: #4f46e5; font-weight: 600; text-decoration: none;">{dashboard_url} ↗</a>
             </div>
             <br><br>
             <p>Best regards,<br><strong>Weekly Cadence App</strong></p>

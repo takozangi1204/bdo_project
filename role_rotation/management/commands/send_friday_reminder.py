@@ -114,7 +114,7 @@ class Command(BaseCommand):
         screenshot_path = os.path.join(settings.BASE_DIR, 'role_rotation_dashboard_temp.png')
         self.stdout.write("Capturing dashboard screenshot...")
         
-        site_url = os.environ.get('APP_URL') or os.environ.get('SITE_URL') or 'https://bdo-project.onrender.com'
+        site_url = os.environ.get('APP_URL') or os.environ.get('SITE_URL') or 'https://bdo-project-app.onrender.com'
         if not site_url.startswith('http'):
             site_url = f"https://{site_url}"
         dashboard_url = f"{site_url.rstrip('/')}/role_rotation/dashboard/"

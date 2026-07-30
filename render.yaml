@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: bdo-project
+    name: bdo-project-app
     runtime: python
     buildCommand: ./build.sh
     startCommand: gunicorn config.wsgi:application

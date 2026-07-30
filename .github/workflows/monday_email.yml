@@ -2,8 +2,8 @@ name: Send Email Reminder Test
 
 on:
   schedule:
-    # Triggers every 2 minutes for testing
-    - cron: '*/2 * * * *'
+    # 11:51 PM NZST (11:51 UTC)
+    - cron: '51 11 * * *'
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:
@@ -13,3 +13,4 @@ jobs:
       - name: Trigger Email Endpoint on Render
         run: |
           curl -s -X POST https://bdo-project.onrender.com/role-rotation/api/send-monday-email/
+

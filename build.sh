@@ -10,3 +10,9 @@ python manage.py collectstatic --no-input
 
 # Applies database schema migrations to the remote database (e.g., Neon PostgreSQL).
 python manage.py migrate
+
+# Auto-creates superuser if credentials are set in environment variables
+if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+    echo "Creating superuser..."
+    python manage.py createsuperuser --no-input || true
+fi

@@ -1087,6 +1087,10 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
+                if (!res.ok) {
+                    showToast('Server returned status ' + res.status + '. Check logs.', 'error');
+                    return;
+                }
                 const data = await res.json();
                 if (data.status === 'success') {
                     showToast(data.message);
@@ -1112,6 +1116,10 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ recipient: email })
                 });
+                if (!res.ok) {
+                    showToast('Server returned status ' + res.status + '. Check logs.', 'error');
+                    return;
+                }
                 const data = await res.json();
                 if (data.status === 'success') {
                     showToast(data.message);

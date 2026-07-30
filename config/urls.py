@@ -16,9 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views as config_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('roadmap.urls')),
     path('scheduler/', include('scheduler.urls')),
+    path('role_rotation/', include('role_rotation.urls')),
+    path('cadence/', include('role_rotation.urls')),
+    path('api/mode/status/', config_views.get_mode_status, name='mode_status'),
+    path('api/mode/toggle/', config_views.toggle_mode, name='mode_toggle'),
 ]

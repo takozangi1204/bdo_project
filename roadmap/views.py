@@ -3,13 +3,15 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from config.views import require_edit_mode
 import json 
 from .models import Phase, Task
 # Create your views here.
 
 def index(request):
     is_superuser = request.user.is_authenticated and request.user.is_superuser
-    return render(request, 'roadmap/index.html', {'is_superuser': is_superuser})
+    mode = request.session.get('app_mode', 'view')
+    return render(request, 'roadmap/index.html', {'is_superuser': is_superuser, 'app_mode': mode})
 
 def get_roadmap_data(request):
     phases = list(Phase.objects.all().order_by('order').values('phase_id', 'name', 'colour', 'bg'))
@@ -43,6 +45,9 @@ def get_roadmap_data(request):
 def save_task(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
     
     try:
         data = json.loads(request.body)
@@ -96,6 +101,9 @@ from django.db import transaction
 def delete_task(request, task_id):
     if request.method not in ['DELETE', 'POST']:
         return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
     
     try:
         Task.objects.filter(id=task_id).delete()
@@ -107,6 +115,9 @@ def delete_task(request, task_id):
 def import_tasks(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
     
     try:
         data = json.loads(request.body)
@@ -184,6 +195,9 @@ def verify_superuser_password(password, username=None):
 def clear_all_tasks(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST method required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
     
     try:
         data = json.loads(request.body)

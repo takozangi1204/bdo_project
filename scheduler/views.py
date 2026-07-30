@@ -6,11 +6,13 @@ from django.db import transaction
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from .models import Category, Event, Todo, SchedulerSetting, BreakPeriod
+from config.views import require_edit_mode
 
 
 def index(request):
     """Serve the Scheduler main page."""
-    return render(request, 'scheduler/index.html')
+    mode = request.session.get('app_mode', 'view')
+    return render(request, 'scheduler/index.html', {'app_mode': mode})
 
 
 def get_scheduler_data(request):
@@ -56,6 +58,9 @@ def save_event(request):
     """Create or update an event."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
     event_id = data.get('event_id')
@@ -95,6 +100,9 @@ def delete_event(request, event_id):
     """Delete a single event."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     deleted_count, _ = Event.objects.filter(event_id=event_id).delete()
     return JsonResponse({'status': 'success', 'deleted': deleted_count})
@@ -105,6 +113,9 @@ def delete_event_series(request, series_id):
     """Delete all events in a recurrence series."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     deleted_count, _ = Event.objects.filter(series_id=series_id).delete()
     return JsonResponse({'status': 'success', 'deleted': deleted_count})
@@ -115,6 +126,9 @@ def save_todo(request):
     """Create or update a to-do item."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
     todo_id = data.get('todo_id')
@@ -151,6 +165,9 @@ def delete_todo(request, todo_id):
     """Delete a to-do item."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     deleted_count, _ = Todo.objects.filter(todo_id=todo_id).delete()
     return JsonResponse({'status': 'success', 'deleted': deleted_count})
@@ -161,6 +178,9 @@ def toggle_todo(request, todo_id):
     """Toggle to-do completion state."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     todo = Todo.objects.filter(todo_id=todo_id).first()
     if not todo:
@@ -176,6 +196,9 @@ def reorder_todos(request):
     """Reorder to-do items (update sort_order and optionally date)."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
     items = data.get('items', [])
@@ -195,6 +218,9 @@ def save_categories(request):
     """Bulk save categories (replace all)."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
     categories = data.get('categories', [])
@@ -228,6 +254,9 @@ def save_settings(request):
     """Save settings and break periods."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
     settings = data.get('settings', {})
@@ -278,6 +307,9 @@ def clear_all(request):
     """Delete all events and todos after validating superuser password."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     try:
         data = json.loads(request.body)
@@ -311,6 +343,9 @@ def import_data(request):
     """Import JSON data (events, todos, categories, settings, breaks)."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
 
     data = json.loads(request.body)
 

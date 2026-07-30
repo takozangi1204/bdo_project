@@ -6,6 +6,9 @@ from .models import Phase, Task
 class RoadmapAPITestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        session = self.client.session
+        session['app_mode'] = 'edit'
+        session.save()
         self.phase_setup = Phase.objects.create(
             phase_id='setup',
             name='Setup',
@@ -164,6 +167,11 @@ class RoadmapAPITestCase(TestCase):
         )
         self.assertEqual(res_ok.status_code, 200)
         self.assertEqual(Task.objects.count(), 0)
+
+    def test_view_mode_blocks_write(self):
+        client = Client()  # Default view mode
+        res = client.post(reverse('save_task'), data=json.dumps({'name': 'Task'}), content_type='application/json')
+        self.assertEqual(res.status_code, 403)
 
 
 

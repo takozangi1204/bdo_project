@@ -7,6 +7,9 @@ from .models import Category, Event, Todo, SchedulerSetting, BreakPeriod
 class SchedulerAPITests(TestCase):
     def setUp(self):
         self.client = Client()
+        session = self.client.session
+        session['app_mode'] = 'edit'
+        session.save()
         self.cat = Category.objects.create(
             cat_id='mbua514',
             name='MBUA514',
@@ -158,5 +161,10 @@ class SchedulerAPITests(TestCase):
         )
         self.assertEqual(res_ok.status_code, 200)
         self.assertEqual(Event.objects.count(), 0)
+
+    def test_view_mode_blocks_write(self):
+        client = Client()  # Default view mode
+        res = client.post(reverse('scheduler_save_event'), data=json.dumps({'title': 'Event'}), content_type='application/json')
+        self.assertEqual(res.status_code, 403)
         self.assertEqual(Todo.objects.count(), 0)
 

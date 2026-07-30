@@ -167,18 +167,22 @@ import threading
 
 def _async_send_friday(recipient):
     try:
+        from django.core.management import call_command
         out = StringIO()
         call_command('send_friday_reminder', recipient=recipient, stdout=out)
+        print("Background Friday Email Success:", out.getvalue())
     except Exception as e:
         print("Async Friday Email Error:", e)
 
 def _async_send_monday(recipient):
     try:
+        from django.core.management import call_command
         out = StringIO()
         if recipient:
             call_command('send_monday_reminder', recipient=recipient, stdout=out)
         else:
             call_command('send_monday_reminder', stdout=out)
+        print("Background Monday Email Success:", out.getvalue())
     except Exception as e:
         print("Async Monday Email Error:", e)
 
@@ -200,8 +204,7 @@ def trigger_friday_reminder(request):
     if 'test' in sys.argv:
         _async_send_friday(recipient)
     else:
-        t = threading.Thread(target=_async_send_friday, args=(recipient,))
-        t.daemon = True
+        t = threading.Thread(target=_async_send_friday, args=(recipient,), daemon=False)
         t.start()
 
     return JsonResponse({
@@ -228,8 +231,7 @@ def trigger_monday_reminder(request):
     if 'test' in sys.argv:
         _async_send_monday(recipient)
     else:
-        t = threading.Thread(target=_async_send_monday, args=(recipient,))
-        t.daemon = True
+        t = threading.Thread(target=_async_send_monday, args=(recipient,), daemon=False)
         t.start()
 
     return JsonResponse({

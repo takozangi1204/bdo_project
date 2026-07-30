@@ -162,63 +162,73 @@ def reset_weekly_progress(request):
     })
 
 
-@csrf_exempt
-def trigger_friday_reminder(request):
-    """Trigger Friday email reminder management command."""
-    if request.method != 'POST':
-        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+import threading
 
+def _async_send_friday(recipient):
     try:
-        from django.conf import settings
-        recipient = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
-        if request.body:
-            try:
-                data = json.loads(request.body)
-                if data.get('recipient'):
-                    recipient = data.get('recipient')
-            except (json.JSONDecodeError, TypeError):
-                pass
-
         out = StringIO()
         call_command('send_friday_reminder', recipient=recipient, stdout=out)
-        output_str = out.getvalue()
-
-        return JsonResponse({
-            'status': 'success',
-            'message': output_str.strip() or f'Friday reminder sent successfully.'
-        })
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': f"Failed to send email: {str(e)}"}, status=200)
+        print("Async Friday Email Error:", e)
 
-
-@csrf_exempt
-def trigger_monday_reminder(request):
-    """Trigger Monday email reminder management command."""
-    if request.method != 'POST':
-        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
-
+def _async_send_monday(recipient):
     try:
-        recipient = None
-        if request.body:
-            try:
-                data = json.loads(request.body)
-                if data.get('recipient'):
-                    recipient = data.get('recipient')
-            except (json.JSONDecodeError, TypeError):
-                pass
-
         out = StringIO()
         if recipient:
             call_command('send_monday_reminder', recipient=recipient, stdout=out)
         else:
             call_command('send_monday_reminder', stdout=out)
-
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Monday 8:00 AM role rotation update email sent successfully.'
-        })
     except Exception as e:
-        return JsonResponse({'status': 'error', 'message': f"Failed to send email: {str(e)}"}, status=200)
+        print("Async Monday Email Error:", e)
+
+@csrf_exempt
+def trigger_friday_reminder(request):
+    """Trigger Friday email reminder asynchronously."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+
+    recipient = None
+    if request.body:
+        try:
+            data = json.loads(request.body)
+            if data.get('recipient'):
+                recipient = data.get('recipient')
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    t = threading.Thread(target=_async_send_friday, args=(recipient,))
+    t.daemon = True
+    t.start()
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Friday reminder email sending initiated in background.'
+    })
+
+
+@csrf_exempt
+def trigger_monday_reminder(request):
+    """Trigger Monday email reminder asynchronously."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+
+    recipient = None
+    if request.body:
+        try:
+            data = json.loads(request.body)
+            if data.get('recipient'):
+                recipient = data.get('recipient')
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    t = threading.Thread(target=_async_send_monday, args=(recipient,))
+    t.daemon = True
+    t.start()
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Monday 8:00 AM update email sending initiated in background.'
+    })
 
 
 

@@ -54,12 +54,10 @@ class Command(BaseCommand):
                 recipient_list = db_emails
             else:
                 default_rem_email = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
-                recipient_list = [default_rem_email] if default_rem_email else []
-
-        if not recipient_list:
-            msg = "No active recipients configured in Admin or environment variables."
-            self.stdout.write(self.style.WARNING(msg))
-            return msg
+                if default_rem_email:
+                    recipient_list = [default_rem_email]
+                else:
+                    recipient_list = ['takozangi0619@outlook.jp', 'takozangi0619@icloud.com']
 
         pending_tasks = WeeklyTask.objects.all().order_by('time', 'id')
         count = pending_tasks.count()

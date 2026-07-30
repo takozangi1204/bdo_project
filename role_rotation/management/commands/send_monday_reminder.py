@@ -176,8 +176,13 @@ class Command(BaseCommand):
                 recipient_list = db_emails
             else:
                 default_rem_email = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
-                team_list = getattr(settings, 'TEAM_EMAIL_RECIPIENTS', [default_rem_email] if default_rem_email else [])
-                recipient_list = team_list
+                team_list = getattr(settings, 'TEAM_EMAIL_RECIPIENTS', [])
+                if team_list:
+                    recipient_list = team_list
+                elif default_rem_email:
+                    recipient_list = [default_rem_email]
+                else:
+                    recipient_list = ['takozangi0619@outlook.jp', 'takozangi0619@icloud.com']
 
         to_emails = recipient_list
         bcc_emails = []

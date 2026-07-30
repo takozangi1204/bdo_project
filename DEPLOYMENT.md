@@ -96,7 +96,7 @@
 | `SECRET_KEY` | *(ランダムな長い文字列)* | 例: `django-insecure-prod-key-9876543210-xyz` |
 | `DEBUG` | `False` | 本番環境では False に設定 |
 | `ALLOWED_HOSTS` | `.onrender.com` | Render のドメインを許可 |
-| `PYTHON_VERSION` | `3.11.9` | 安定した Python バージョンを指定 |
+| `PYTHON_VERSION` | `3.12.8` | Django 6.x に必要な Python 3.12 以降を指定 |
 | `APP_EDIT_PASSWORD` | *(閲覧・編集モード切替パスワード)* | 任意の設定パスワード |
 
 6. 「**Create Web Service**」をクリックします。

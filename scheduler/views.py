@@ -373,7 +373,11 @@ def import_data(request):
             cat_id = e.get('catId') or e.get('category_id', '')
             cat = Category.objects.filter(cat_id=cat_id).first()
             if not cat:
-                continue
+                cat_name = cat_id if cat_id else 'General'
+                cat, _ = Category.objects.get_or_create(
+                    cat_id=cat_id or 'general',
+                    defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
+                )
             Event.objects.update_or_create(
                 event_id=e.get('id') or e.get('event_id', ''),
                 defaults={
@@ -394,7 +398,11 @@ def import_data(request):
             cat_id = t.get('catId') or t.get('category_id', '')
             cat = Category.objects.filter(cat_id=cat_id).first()
             if not cat:
-                continue
+                cat_name = cat_id if cat_id else 'General'
+                cat, _ = Category.objects.get_or_create(
+                    cat_id=cat_id or 'general',
+                    defaults={'name': cat_name, 'color': '#2A9D8F', 'bg': '#E8F5E9'}
+                )
             Todo.objects.update_or_create(
                 todo_id=t.get('id') or t.get('todo_id', ''),
                 defaults={

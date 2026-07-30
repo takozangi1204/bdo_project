@@ -152,18 +152,20 @@ def import_tasks(request):
 
                 phase = Phase.objects.filter(phase_id=phase_id).first()
                 if not phase:
-                    phase = Phase.objects.first()
-
-                if phase:
-                    Task.objects.create(
-                        title=name,
-                        phase=phase,
-                        start_date=start_date,
-                        end_date=end_date,
-                        status=status,
-                        deliverables=deliverables
+                    phase, _ = Phase.objects.get_or_create(
+                        phase_id=phase_id or 'phase-1',
+                        defaults={'name': f"Phase {phase_id or 1}", 'colour': '#3b82f6', 'bg': '#dbeafe', 'order': 1}
                     )
-                    imported_count += 1
+
+                Task.objects.create(
+                    title=name,
+                    phase=phase,
+                    start_date=start_date,
+                    end_date=end_date,
+                    status=status,
+                    deliverables=deliverables
+                )
+                imported_count += 1
 
         return JsonResponse({'status': 'success', 'imported_count': imported_count})
     

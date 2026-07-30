@@ -182,8 +182,8 @@ Weekly Cadence App
         """
 
         # --- 4. メールの作成と画像の添付 ---
-        to_emails = recipient_list if len(recipient_list) == 1 else []
-        bcc_emails = [] if len(recipient_list) == 1 else recipient_list
+        to_emails = recipient_list
+        bcc_emails = []
 
         email = EmailMultiAlternatives(
             subject=subject,

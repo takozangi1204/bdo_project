@@ -179,8 +179,8 @@ class Command(BaseCommand):
                 team_list = getattr(settings, 'TEAM_EMAIL_RECIPIENTS', [default_rem_email] if default_rem_email else [])
                 recipient_list = team_list
 
-        to_emails = recipient_list if len(recipient_list) == 1 else []
-        bcc_emails = [] if len(recipient_list) == 1 else recipient_list
+        to_emails = recipient_list
+        bcc_emails = []
 
         email = EmailMultiAlternatives(
             subject=subject,

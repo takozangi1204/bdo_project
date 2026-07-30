@@ -109,15 +109,22 @@
 1. **Web サイトへのアクセス確認**
    - デプロイログの最後に表示される URL (`https://bdo-project.onrender.com`) にアクセスし、アプリが正常に表示されるか確認します。
 
-2. **Django 管理者アカウント (Superuser) の作成**
-   - Render のダッシュボードからデプロイした Web サービスを開きます。
-   - 左側メニューの「**Shell**」タブをクリックしてオンラインターミナルを開きます。
-   - 以下のコマンドを実行して管理者アカウントを作成します：
-     ```bash
-     python manage.py createsuperuser
+2. **Django 管理者アカウント (Superuser) の作成方法 (無料プラン)**
+   - Render の無料プランでは Shell タブが使えないため、以下の **いずれかの方法** で作成します：
+
+   - **方法 A (最も簡単: Render の環境変数で作成)**:
+     Render の **Environment** タブで以下の環境変数を追加します：
+     - `DJANGO_SUPERUSER_USERNAME`: `admin` (または希望のユーザー名)
+     - `DJANGO_SUPERUSER_PASSWORD`: *(設定したい管理者パスワード)*
+     - `DJANGO_SUPERUSER_EMAIL`: `admin@example.com`
+     保存して再デプロイすると、`build.sh` が自動的に管理者ユーザーを作成します！
+
+   - **方法 B (手元の PC から Neon DB へ直接接続して作成)**:
+     手元の PowerShell で Neon の `DATABASE_URL` を指定してコマンドを実行します：
+     ```powershell
+     $env:DATABASE_URL="postgresql://user:pass@ep-xyz.neon.tech/neondb?sslmode=require"
+     .\venv\Scripts\python.exe manage.py createsuperuser
      ```
-   - 画面の指示に従い、ユーザー名・メールアドレス・パスワードを入力します。
-   - 作成後、`https://bdo-project.onrender.com/admin/` にアクセスしてログインできるか確認します。
 
 ---
 

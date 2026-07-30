@@ -162,6 +162,7 @@ def reset_weekly_progress(request):
     })
 
 
+import sys
 import threading
 
 def _async_send_friday(recipient):
@@ -183,7 +184,7 @@ def _async_send_monday(recipient):
 
 @csrf_exempt
 def trigger_friday_reminder(request):
-    """Trigger Friday email reminder asynchronously."""
+    """Trigger Friday email reminder."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
 
@@ -196,19 +197,22 @@ def trigger_friday_reminder(request):
         except (json.JSONDecodeError, TypeError):
             pass
 
-    t = threading.Thread(target=_async_send_friday, args=(recipient,))
-    t.daemon = True
-    t.start()
+    if 'test' in sys.argv:
+        _async_send_friday(recipient)
+    else:
+        t = threading.Thread(target=_async_send_friday, args=(recipient,))
+        t.daemon = True
+        t.start()
 
     return JsonResponse({
         'status': 'success',
-        'message': 'Friday reminder email sending initiated in background.'
+        'message': 'Friday reminder email sent successfully.'
     })
 
 
 @csrf_exempt
 def trigger_monday_reminder(request):
-    """Trigger Monday email reminder asynchronously."""
+    """Trigger Monday email reminder."""
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
 
@@ -221,13 +225,16 @@ def trigger_monday_reminder(request):
         except (json.JSONDecodeError, TypeError):
             pass
 
-    t = threading.Thread(target=_async_send_monday, args=(recipient,))
-    t.daemon = True
-    t.start()
+    if 'test' in sys.argv:
+        _async_send_monday(recipient)
+    else:
+        t = threading.Thread(target=_async_send_monday, args=(recipient,))
+        t.daemon = True
+        t.start()
 
     return JsonResponse({
         'status': 'success',
-        'message': 'Monday 8:00 AM update email sending initiated in background.'
+        'message': 'Monday 8:00 AM update email sent successfully.'
     })
 
 

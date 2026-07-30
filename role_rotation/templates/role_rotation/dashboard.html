@@ -1094,7 +1094,7 @@
                     showToast(data.message || 'Failed to send reminder', 'error');
                 }
             } catch (err) {
-                showToast('Error sending Monday reminder', 'error');
+                showToast(err.message || 'Error sending Monday reminder', 'error');
             }
         }
 
@@ -1119,7 +1119,7 @@
                     showToast(data.message || 'Failed to send reminder', 'error');
                 }
             } catch (err) {
-                showToast('Error sending Monday reminder', 'error');
+                showToast(err.message || 'Error sending Monday reminder', 'error');
             }
         }
 

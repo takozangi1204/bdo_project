@@ -168,24 +168,27 @@ def trigger_friday_reminder(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
 
-    from django.conf import settings
-    recipient = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
-    if request.body:
-        try:
-            data = json.loads(request.body)
-            if data.get('recipient'):
-                recipient = data.get('recipient')
-        except (json.JSONDecodeError, TypeError):
-            pass
+    try:
+        from django.conf import settings
+        recipient = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
+        if request.body:
+            try:
+                data = json.loads(request.body)
+                if data.get('recipient'):
+                    recipient = data.get('recipient')
+            except (json.JSONDecodeError, TypeError):
+                pass
 
-    out = StringIO()
-    call_command('send_friday_reminder', recipient=recipient, stdout=out)
-    output_str = out.getvalue()
+        out = StringIO()
+        call_command('send_friday_reminder', recipient=recipient, stdout=out)
+        output_str = out.getvalue()
 
-    return JsonResponse({
-        'status': 'success',
-        'message': output_str.strip() or f'Friday reminder sent successfully to {recipient}.'
-    })
+        return JsonResponse({
+            'status': 'success',
+            'message': output_str.strip() or f'Friday reminder sent successfully.'
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': f"Failed to send email: {str(e)}"}, status=200)
 
 
 @csrf_exempt
@@ -194,25 +197,28 @@ def trigger_monday_reminder(request):
     if request.method != 'POST':
         return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
 
-    recipient = None
-    if request.body:
-        try:
-            data = json.loads(request.body)
-            if data.get('recipient'):
-                recipient = data.get('recipient')
-        except (json.JSONDecodeError, TypeError):
-            pass
+    try:
+        recipient = None
+        if request.body:
+            try:
+                data = json.loads(request.body)
+                if data.get('recipient'):
+                    recipient = data.get('recipient')
+            except (json.JSONDecodeError, TypeError):
+                pass
 
-    out = StringIO()
-    if recipient:
-        call_command('send_monday_reminder', recipient=recipient, stdout=out)
-    else:
-        call_command('send_monday_reminder', stdout=out)
+        out = StringIO()
+        if recipient:
+            call_command('send_monday_reminder', recipient=recipient, stdout=out)
+        else:
+            call_command('send_monday_reminder', stdout=out)
 
-    return JsonResponse({
-        'status': 'success',
-        'message': 'Monday 8:00 AM role rotation update email sent successfully.'
-    })
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Monday 8:00 AM role rotation update email sent successfully.'
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': f"Failed to send email: {str(e)}"}, status=200)
 
 
 

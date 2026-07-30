@@ -1,0 +1,1878 @@
+[
+{
+  "model": "roadmap.phase",
+  "pk": 1,
+  "fields": {
+    "phase_id": "setup",
+    "name": "Setup",
+    "colour": "#6B8DE3",
+    "bg": "#E0E8FF",
+    "order": 1
+  }
+},
+{
+  "model": "roadmap.phase",
+  "pk": 2,
+  "fields": {
+    "phase_id": "empathise",
+    "name": "Empathise (Diagnostic)",
+    "colour": "#9B7FD4",
+    "bg": "#EDE5FF",
+    "order": 2
+  }
+},
+{
+  "model": "roadmap.phase",
+  "pk": 3,
+  "fields": {
+    "phase_id": "define",
+    "name": "Define (Analysis)",
+    "colour": "#2ECC71",
+    "bg": "#D5F5E3",
+    "order": 3
+  }
+},
+{
+  "model": "roadmap.phase",
+  "pk": 4,
+  "fields": {
+    "phase_id": "ideate",
+    "name": "Ideate & Prototype (Design)",
+    "colour": "#E8837C",
+    "bg": "#FFE5E2",
+    "order": 4
+  }
+},
+{
+  "model": "roadmap.phase",
+  "pk": 5,
+  "fields": {
+    "phase_id": "test",
+    "name": "Test (Execution)",
+    "colour": "#E8A87C",
+    "bg": "#FFF0E0",
+    "order": 5
+  }
+},
+{
+  "model": "roadmap.phase",
+  "pk": 6,
+  "fields": {
+    "phase_id": "milestone",
+    "name": "Academic Schedule",
+    "colour": "#E63946",
+    "bg": "#FFE0E3",
+    "order": 6
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 2,
+  "fields": {
+    "title": "Setup",
+    "phase": 1,
+    "start_date": "2026-07-06",
+    "end_date": "2026-07-12",
+    "status": "done",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.371Z",
+    "updated_at": "2026-07-28T10:11:56.371Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 3,
+  "fields": {
+    "title": "General Information Gathering",
+    "phase": 2,
+    "start_date": "2026-07-13",
+    "end_date": "2026-07-19",
+    "status": "done",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.374Z",
+    "updated_at": "2026-07-28T10:11:56.374Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 4,
+  "fields": {
+    "title": "Interviewing",
+    "phase": 2,
+    "start_date": "2026-07-27",
+    "end_date": "2026-08-16",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.376Z",
+    "updated_at": "2026-07-28T10:47:37.336Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 5,
+  "fields": {
+    "title": "Sort out requirements",
+    "phase": 2,
+    "start_date": "2026-07-27",
+    "end_date": "2026-08-16",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.377Z",
+    "updated_at": "2026-07-28T10:11:56.377Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 6,
+  "fields": {
+    "title": "Client General Requirement Analysis",
+    "phase": 3,
+    "start_date": "2026-07-20",
+    "end_date": "2026-08-02",
+    "status": "inprogress",
+    "deliverables": "Outcomes / Outputs Documents",
+    "created_at": "2026-07-28T10:11:56.378Z",
+    "updated_at": "2026-07-28T10:11:56.378Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 7,
+  "fields": {
+    "title": "Stakeholder Analysis",
+    "phase": 3,
+    "start_date": "2026-07-27",
+    "end_date": "2026-08-02",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.379Z",
+    "updated_at": "2026-07-28T10:11:56.379Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 8,
+  "fields": {
+    "title": "Process Modelling",
+    "phase": 3,
+    "start_date": "2026-08-03",
+    "end_date": "2026-08-16",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.380Z",
+    "updated_at": "2026-07-28T10:11:56.380Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 9,
+  "fields": {
+    "title": "Current State Analysis (data and process)",
+    "phase": 3,
+    "start_date": "2026-08-03",
+    "end_date": "2026-08-16",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.381Z",
+    "updated_at": "2026-07-28T10:11:56.381Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 10,
+  "fields": {
+    "title": "Gap Analysis",
+    "phase": 3,
+    "start_date": "2026-08-10",
+    "end_date": "2026-08-23",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.382Z",
+    "updated_at": "2026-07-28T10:11:56.382Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 11,
+  "fields": {
+    "title": "Feedback Analysis",
+    "phase": 3,
+    "start_date": "2026-08-17",
+    "end_date": "2026-09-20",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.382Z",
+    "updated_at": "2026-07-28T10:11:56.383Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 12,
+  "fields": {
+    "title": "Ideate & Prototype (Design)",
+    "phase": 4,
+    "start_date": "2026-08-03",
+    "end_date": "2026-09-20",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.383Z",
+    "updated_at": "2026-07-28T10:11:56.383Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 13,
+  "fields": {
+    "title": "Test (Execution)",
+    "phase": 5,
+    "start_date": "2026-08-31",
+    "end_date": "2026-09-27",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.385Z",
+    "updated_at": "2026-07-28T10:11:56.385Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 14,
+  "fields": {
+    "title": "(Report) Learning Objective",
+    "phase": 6,
+    "start_date": "2026-07-24",
+    "end_date": "2026-07-24",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.386Z",
+    "updated_at": "2026-07-28T10:11:56.386Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 15,
+  "fields": {
+    "title": "(Report) Interim Report",
+    "phase": 6,
+    "start_date": "2026-08-14",
+    "end_date": "2026-08-14",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.387Z",
+    "updated_at": "2026-07-28T10:11:56.387Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 16,
+  "fields": {
+    "title": "Poster Presentation",
+    "phase": 6,
+    "start_date": "2026-09-30",
+    "end_date": "2026-09-30",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.388Z",
+    "updated_at": "2026-07-28T10:11:56.388Z"
+  }
+},
+{
+  "model": "roadmap.task",
+  "pk": 17,
+  "fields": {
+    "title": "(Report) Final Report",
+    "phase": 6,
+    "start_date": "2026-10-12",
+    "end_date": "2026-10-12",
+    "status": "todo",
+    "deliverables": "",
+    "created_at": "2026-07-28T10:11:56.390Z",
+    "updated_at": "2026-07-28T10:11:56.390Z"
+  }
+},
+{
+  "model": "scheduler.category",
+  "pk": 1,
+  "fields": {
+    "cat_id": "mbua514",
+    "name": "MBUA514",
+    "color": "#E63946",
+    "bg": "#FFE0E3",
+    "sort_order": 0
+  }
+},
+{
+  "model": "scheduler.category",
+  "pk": 2,
+  "fields": {
+    "cat_id": "mbua532",
+    "name": "MBUA532",
+    "color": "#457B9D",
+    "bg": "#D4E8F5",
+    "sort_order": 1
+  }
+},
+{
+  "model": "scheduler.category",
+  "pk": 5,
+  "fields": {
+    "cat_id": "group",
+    "name": "BDO Project",
+    "color": "#2A9D8F",
+    "bg": "#D1F0EB",
+    "sort_order": 2
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 168,
+  "fields": {
+    "event_id": "mrd8hi7ve3uah",
+    "series_id": null,
+    "date": "2026-07-09",
+    "category": "mbua532",
+    "title": "Kick-Off Meeting",
+    "url": "",
+    "start_time": "13:40",
+    "end_time": "15:40"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 169,
+  "fields": {
+    "event_id": "mrd8jbel41shx",
+    "series_id": null,
+    "date": "2026-08-13",
+    "category": "mbua532",
+    "title": "Update Class",
+    "url": "",
+    "start_time": "13:40",
+    "end_time": "15:40"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 170,
+  "fields": {
+    "event_id": "mrd8l13cw54ld",
+    "series_id": null,
+    "date": "2026-09-30",
+    "category": "mbua532",
+    "title": "Poster Presentation",
+    "url": "https://nuku.wgtn.ac.nz/courses/31122/assignments",
+    "start_time": "12:00",
+    "end_time": "17:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 171,
+  "fields": {
+    "event_id": "mrd8lu2bpt2p3",
+    "series_id": null,
+    "date": "2026-09-29",
+    "category": "mbua532",
+    "title": "★Poster submission",
+    "url": "https://nuku.wgtn.ac.nz/courses/31122/assignments",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 172,
+  "fields": {
+    "event_id": "mrd8mkzuy2wf0",
+    "series_id": null,
+    "date": "2026-07-08",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 173,
+  "fields": {
+    "event_id": "mrd8mkzut9bda",
+    "series_id": null,
+    "date": "2026-07-15",
+    "category": "mbua514",
+    "title": "Presentation",
+    "url": "",
+    "start_time": "14:30",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 174,
+  "fields": {
+    "event_id": "mrd8mkzu20shx",
+    "series_id": null,
+    "date": "2026-07-22",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 175,
+  "fields": {
+    "event_id": "mrd8mkzvd5c7t",
+    "series_id": null,
+    "date": "2026-07-29",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 176,
+  "fields": {
+    "event_id": "mrd8mkzvqdn5k",
+    "series_id": null,
+    "date": "2026-08-05",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 177,
+  "fields": {
+    "event_id": "mrd8mkzvt26oq",
+    "series_id": null,
+    "date": "2026-08-12",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 178,
+  "fields": {
+    "event_id": "mrd8mkzvju3tk",
+    "series_id": null,
+    "date": "2026-09-02",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 179,
+  "fields": {
+    "event_id": "mrd8mkzvscl7k",
+    "series_id": null,
+    "date": "2026-09-09",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 180,
+  "fields": {
+    "event_id": "mrd8mkzvzqp6j",
+    "series_id": null,
+    "date": "2026-09-16",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 181,
+  "fields": {
+    "event_id": "mrd8mkzvh45cz",
+    "series_id": null,
+    "date": "2026-09-23",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 182,
+  "fields": {
+    "event_id": "mrd8mkzvomaat",
+    "series_id": null,
+    "date": "2026-09-30",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 183,
+  "fields": {
+    "event_id": "mrd8mkzvzxgrj",
+    "series_id": null,
+    "date": "2026-10-07",
+    "category": "mbua514",
+    "title": "Class",
+    "url": "",
+    "start_time": "09:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 184,
+  "fields": {
+    "event_id": "mrd9ix6mggi7c",
+    "series_id": null,
+    "date": "2026-07-16",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 185,
+  "fields": {
+    "event_id": "mrd9ix6mcfz2v",
+    "series_id": null,
+    "date": "2026-07-30",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 186,
+  "fields": {
+    "event_id": "mrd9ix6m5i1ky",
+    "series_id": null,
+    "date": "2026-08-27",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 187,
+  "fields": {
+    "event_id": "mrd9ix6mstze3",
+    "series_id": null,
+    "date": "2026-09-25",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 188,
+  "fields": {
+    "event_id": "mrd9sx1ptysde",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-07-14",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 189,
+  "fields": {
+    "event_id": "mrd9sx1pz0g13",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-07-21",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 190,
+  "fields": {
+    "event_id": "mrd9sx1pkc68n",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-07-28",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 191,
+  "fields": {
+    "event_id": "mrd9sx1pymahp",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-08-04",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 192,
+  "fields": {
+    "event_id": "mrd9sx1p8pkyv",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-08-11",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 193,
+  "fields": {
+    "event_id": "mrd9sx1pxqh8i",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-08-18",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 194,
+  "fields": {
+    "event_id": "mrd9sx1p6i6zp",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-08-25",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 195,
+  "fields": {
+    "event_id": "mrd9sx1pop291",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-09-01",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 196,
+  "fields": {
+    "event_id": "mrd9sx1qenehq",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-09-08",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 197,
+  "fields": {
+    "event_id": "mrd9sx1q9xjly",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-09-15",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 198,
+  "fields": {
+    "event_id": "mrd9sx1quqt5c",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-09-22",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 199,
+  "fields": {
+    "event_id": "mrd9sx1q8tfbv",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-09-29",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 200,
+  "fields": {
+    "event_id": "mrd9sx1qwypkb",
+    "series_id": "mrd9sx1pp9jav",
+    "date": "2026-10-06",
+    "category": "group",
+    "title": "★Send Weekly Report to James",
+    "url": "",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 201,
+  "fields": {
+    "event_id": "mrd9vmhikw9i1",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-07-16",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 202,
+  "fields": {
+    "event_id": "mrd9vmhijcoc0",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-07-23",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 203,
+  "fields": {
+    "event_id": "mrd9vmhiomzll",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-07-30",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 204,
+  "fields": {
+    "event_id": "mrd9vmhib0wnl",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-08-06",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 205,
+  "fields": {
+    "event_id": "mrd9vmhifx0x7",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-08-13",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 206,
+  "fields": {
+    "event_id": "mrd9vmhiu40q4",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-08-20",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 207,
+  "fields": {
+    "event_id": "mrd9vmhie0j0a",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-08-27",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 208,
+  "fields": {
+    "event_id": "mrd9vmhidat50",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-09-03",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 209,
+  "fields": {
+    "event_id": "mrd9vmhizas9t",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-09-10",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 210,
+  "fields": {
+    "event_id": "mrd9vmhi0y27q",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-09-17",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 211,
+  "fields": {
+    "event_id": "mrd9vmhil2kxx",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-09-24",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 212,
+  "fields": {
+    "event_id": "mrd9vmhiryyvu",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-10-01",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 213,
+  "fields": {
+    "event_id": "mrd9vmhip5ujo",
+    "series_id": "mrd9vmhib1glp",
+    "date": "2026-10-08",
+    "category": "mbua532",
+    "title": "★Send Weekly Report to Michel",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 214,
+  "fields": {
+    "event_id": "mrd9xdtv8242h",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-07-17",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 215,
+  "fields": {
+    "event_id": "mrd9xdtvbq9gv",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-07-24",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 216,
+  "fields": {
+    "event_id": "mrd9xdtv63cy3",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-07-31",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "00:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 217,
+  "fields": {
+    "event_id": "mrd9xdtv2bqmx",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-08-07",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 218,
+  "fields": {
+    "event_id": "mrd9xdtvntltb",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-08-14",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 219,
+  "fields": {
+    "event_id": "mrd9xdtvpcjq8",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-09-04",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 220,
+  "fields": {
+    "event_id": "mrd9xdtvszw35",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-09-11",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 221,
+  "fields": {
+    "event_id": "mrd9xdtvaajfz",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-09-18",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 222,
+  "fields": {
+    "event_id": "mrd9xdtvt3vnl",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-09-25",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 223,
+  "fields": {
+    "event_id": "mrd9xdtvcrzo6",
+    "series_id": "mrd9xdtvqvmw2",
+    "date": "2026-10-02",
+    "category": "mbua514",
+    "title": "★Weekly Exercise",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 224,
+  "fields": {
+    "event_id": "mrdaaz2lhin7v",
+    "series_id": "mrdaaz2l0l0xt",
+    "date": "2026-07-15",
+    "category": "mbua514",
+    "title": "Group Meeting: Presentation Practice",
+    "url": "",
+    "start_time": "11:00",
+    "end_time": "12:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 225,
+  "fields": {
+    "event_id": "mrdafd2yrjmzl",
+    "series_id": "mrdafd2y2ja37",
+    "date": "2026-07-13",
+    "category": "group",
+    "title": "[Internal Deadline] “Requirements Gathering Plan” and “Initial Reporting Queries",
+    "url": "",
+    "start_time": "19:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 226,
+  "fields": {
+    "event_id": "mrdagilkkriid",
+    "series_id": "mrdagilk9zczs",
+    "date": "2026-07-13",
+    "category": "mbua514",
+    "title": "[Internal Deadline] Draft Presentation Slides",
+    "url": "",
+    "start_time": "19:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 227,
+  "fields": {
+    "event_id": "mrhcp9llqd2ws",
+    "series_id": "mrhcp9llwyr7b",
+    "date": "2026-07-24",
+    "category": "mbua532",
+    "title": "★Individual Learning Objectives",
+    "url": "https://nuku.wgtn.ac.nz/courses/31122/assignments",
+    "start_time": "5:00 PM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 228,
+  "fields": {
+    "event_id": "mrhcqe2gxe0wz",
+    "series_id": "mrhcqe2g7d9m8",
+    "date": "2026-08-14",
+    "category": "mbua532",
+    "title": "★Interim Report",
+    "url": "https://nuku.wgtn.ac.nz/courses/31122/assignments",
+    "start_time": "17:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 229,
+  "fields": {
+    "event_id": "mrhcrrai2jtwc",
+    "series_id": "mrhcrrai8ij1a",
+    "date": "2026-10-12",
+    "category": "mbua532",
+    "title": "★Final Report",
+    "url": "https://nuku.wgtn.ac.nz/courses/31122/assignments",
+    "start_time": "18:00",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 230,
+  "fields": {
+    "event_id": "mris6i48a7hz2",
+    "series_id": "mris6i48zkhec",
+    "date": "2026-08-11",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "11:00",
+    "end_time": "11:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 231,
+  "fields": {
+    "event_id": "mris87kcy6at5",
+    "series_id": "mris87kcortwa",
+    "date": "2026-09-17",
+    "category": "group",
+    "title": "BDO Meeting",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "14:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 263,
+  "fields": {
+    "event_id": "mrlbsg51qccdq",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-07-16",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 264,
+  "fields": {
+    "event_id": "mrlbsg51ikgwj",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-07-23",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 265,
+  "fields": {
+    "event_id": "mrlbsg51dh7oi",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-07-30",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 266,
+  "fields": {
+    "event_id": "mrlbsg51t1hg1",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-08-06",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 267,
+  "fields": {
+    "event_id": "mrlbsg5124rpm",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-08-13",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 268,
+  "fields": {
+    "event_id": "mrlbsg5157jpe",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-08-20",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 269,
+  "fields": {
+    "event_id": "mrlbsg51rsooh",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-08-27",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 270,
+  "fields": {
+    "event_id": "mrlbsg51bn374",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-09-03",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 271,
+  "fields": {
+    "event_id": "mrlbsg517gf40",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-09-10",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 272,
+  "fields": {
+    "event_id": "mrlbsg51qeodi",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-09-17",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 273,
+  "fields": {
+    "event_id": "mrlbsg516sra6",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-09-24",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 274,
+  "fields": {
+    "event_id": "mrlbsg51qlwla",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-10-01",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 275,
+  "fields": {
+    "event_id": "mrlbsg51kc9xt",
+    "series_id": "mrlbsg51y1cuo",
+    "date": "2026-10-08",
+    "category": "group",
+    "title": "Meeting with Michel",
+    "url": "",
+    "start_time": "15:30",
+    "end_time": "16:30"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 276,
+  "fields": {
+    "event_id": "mrlcdz0ysrm09",
+    "series_id": "mrlcdz0ya7ppd",
+    "date": "2026-10-07",
+    "category": "mbua514",
+    "title": "★Presentation Submission",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 278,
+  "fields": {
+    "event_id": "mrlcjwktzac9x",
+    "series_id": "mrlcjwktqqt08",
+    "date": "2026-08-07",
+    "category": "mbua514",
+    "title": "★Online Quiz",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 279,
+  "fields": {
+    "event_id": "mrlcjwktwrp7e",
+    "series_id": "mrlcjwktqqt08",
+    "date": "2026-08-14",
+    "category": "mbua514",
+    "title": "★Online Quiz",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 280,
+  "fields": {
+    "event_id": "mrlcjwktzvpbx",
+    "series_id": "mrlcjwktqqt08",
+    "date": "2026-09-11",
+    "category": "mbua514",
+    "title": "★Online Quiz",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 281,
+  "fields": {
+    "event_id": "mrlcjwkta0cqz",
+    "series_id": "mrlcjwktqqt08",
+    "date": "2026-09-18",
+    "category": "mbua514",
+    "title": "★Online Quiz",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 282,
+  "fields": {
+    "event_id": "mrlcjwktsmgga",
+    "series_id": "mrlcjwktqqt08",
+    "date": "2026-10-09",
+    "category": "mbua514",
+    "title": "★Online Quiz",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "12:00 AM",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 283,
+  "fields": {
+    "event_id": "mrlclq0wxbx6d",
+    "series_id": "mrlclq0vtxlxl",
+    "date": "2026-09-25",
+    "category": "mbua514",
+    "title": "★Baseline Architecture",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 284,
+  "fields": {
+    "event_id": "mrlcmfcuyc4co",
+    "series_id": "mrlcmfcurveth",
+    "date": "2026-09-04",
+    "category": "mbua514",
+    "title": "★Scope Group Goals & Assignment 4+5 Milestones",
+    "url": "https://nuku.wgtn.ac.nz/courses/31117/assignments",
+    "start_time": "23:50",
+    "end_time": ""
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 285,
+  "fields": {
+    "event_id": "mrlcoe689e4um",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-07-21",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 286,
+  "fields": {
+    "event_id": "mrlcoe68ei309",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-07-28",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00 AM"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 287,
+  "fields": {
+    "event_id": "mrlcoe68gkdwt",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-08-04",
+    "category": "group",
+    "title": "Weekly Meeting (in-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 288,
+  "fields": {
+    "event_id": "mrlcoe68c58xr",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-08-11",
+    "category": "group",
+    "title": "Weekly Meeting (in-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 289,
+  "fields": {
+    "event_id": "mrlcoe682jozu",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-08-18",
+    "category": "group",
+    "title": "Weekly Meeting (in-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 290,
+  "fields": {
+    "event_id": "mrlcoe68xj8i1",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-08-25",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 291,
+  "fields": {
+    "event_id": "mrlcoe68s79jz",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-09-01",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 292,
+  "fields": {
+    "event_id": "mrlcoe680czg4",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-09-08",
+    "category": "group",
+    "title": "Weekly Meeting (in-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 293,
+  "fields": {
+    "event_id": "mrlcoe68n7jzi",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-09-15",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 294,
+  "fields": {
+    "event_id": "mrlcoe68oa8m5",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-09-22",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 295,
+  "fields": {
+    "event_id": "mrlcoe68r9m38",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-09-29",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 296,
+  "fields": {
+    "event_id": "mrlcoe68v28im",
+    "series_id": "mrlcoe68b57z6",
+    "date": "2026-10-06",
+    "category": "group",
+    "title": "Weekly Group Meeting (In-person)",
+    "url": "",
+    "start_time": "10:00",
+    "end_time": "11:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 309,
+  "fields": {
+    "event_id": "mrlcttczk79xb",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-07-22",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 310,
+  "fields": {
+    "event_id": "mrlcttczx6kjl",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-07-29",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 311,
+  "fields": {
+    "event_id": "mrlcttczl310r",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-08-05",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 312,
+  "fields": {
+    "event_id": "mrlcttczedhvo",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-08-12",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 315,
+  "fields": {
+    "event_id": "mrlcttcz3jdib",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-09-02",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 316,
+  "fields": {
+    "event_id": "mrlcttczits6l",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-09-09",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 317,
+  "fields": {
+    "event_id": "mrlcttczptw8m",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-09-16",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 318,
+  "fields": {
+    "event_id": "mrlcttczj4eoj",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-09-23",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 319,
+  "fields": {
+    "event_id": "mrlcttcz0f8ar",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-09-30",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 320,
+  "fields": {
+    "event_id": "mrlcttcz4bq9k",
+    "series_id": "mrlcttcz6jea3",
+    "date": "2026-10-07",
+    "category": "mbua514",
+    "title": "Feedback Session",
+    "url": "",
+    "start_time": "14:00",
+    "end_time": "15:00"
+  }
+},
+{
+  "model": "scheduler.event",
+  "pk": 344,
+  "fields": {
+    "event_id": "ms5x8ih1l9d05",
+    "series_id": "ms5x8ih1xkgb9",
+    "date": "2026-07-09",
+    "category": "mbua532",
+    "title": "Kick-off Meeting",
+    "url": "",
+    "start_time": "11:30",
+    "end_time": "12:00"
+  }
+},
+{
+  "model": "scheduler.schedulersetting",
+  "pk": "endDate",
+  "fields": {
+    "value": "2026-10-18"
+  }
+},
+{
+  "model": "scheduler.schedulersetting",
+  "pk": "startDate",
+  "fields": {
+    "value": "2026-07-06"
+  }
+},
+{
+  "model": "scheduler.schedulersetting",
+  "pk": "viewMode",
+  "fields": {
+    "value": "events"
+  }
+},
+{
+  "model": "scheduler.breakperiod",
+  "pk": 31,
+  "fields": {
+    "break_id": "b1",
+    "name": "School Break",
+    "start_date": "2026-08-17",
+    "end_date": "2026-08-30"
+  }
+},
+{
+  "model": "scheduler.breakperiod",
+  "pk": 32,
+  "fields": {
+    "break_id": "b2",
+    "name": "School Break",
+    "start_date": "2026-10-12",
+    "end_date": "2026-10-18"
+  }
+}
+]

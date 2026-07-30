@@ -11,10 +11,8 @@ python manage.py collectstatic --no-input
 # Applies database schema migrations to the remote database (e.g., Neon PostgreSQL).
 python manage.py migrate
 
-# Auto-creates superuser ONLY if DJANGO_SUPERUSER_USERNAME and DJANGO_SUPERUSER_PASSWORD are set in secure environment variables
+# Safe automatic superuser creation: checks if user exists before creating to prevent duplicate username errors
 if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
-    echo "Creating superuser '${DJANGO_SUPERUSER_USERNAME}' from environment variables..."
-    python manage.py createsuperuser --no-input || true
-else
-    echo "Notice: DJANGO_SUPERUSER_PASSWORD is not set. Skipping automated superuser creation for security."
+    echo "Ensuring superuser '${DJANGO_SUPERUSER_USERNAME}' exists..."
+    python manage.py shell -c "from django.contrib.auth.models import User; import os; u=os.environ.get('DJANGO_SUPERUSER_USERNAME'); p=os.environ.get('DJANGO_SUPERUSER_PASSWORD'); e=os.environ.get('DJANGO_SUPERUSER_EMAIL',''); User.objects.filter(username=u).exists() or User.objects.create_superuser(u, e, p)"
 fi

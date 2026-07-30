@@ -13,7 +13,28 @@ def index(request):
     mode = request.session.get('app_mode', 'view')
     return render(request, 'roadmap/index.html', {'is_superuser': is_superuser, 'app_mode': mode})
 
+DEFAULT_PHASES = [
+    ('setup', 'Setup', '#6B8DE3', '#E0E8FF', 1),
+    ('empathise', 'Empathise (Diagnostic)', '#9B7FD4', '#EDE5FF', 2),
+    ('define', 'Define (Analysis)', '#2ECC71', '#D5F5E3', 3),
+    ('ideate', 'Ideate & Prototype (Design)', '#E8837C', '#FFE5E2', 4),
+    ('test', 'Test (Execution)', '#E8A87C', '#FFF0E0', 5),
+    ('milestone', 'Academic Schedule', '#E63946', '#FFE0E3', 6),
+]
+
+def ensure_default_phases():
+    if not Phase.objects.exists():
+        for pid, name, colour, bg, order in DEFAULT_PHASES:
+            Phase.objects.create(
+                phase_id=pid,
+                name=name,
+                colour=colour,
+                bg=bg,
+                order=order
+            )
+
 def get_roadmap_data(request):
+    ensure_default_phases()
     phases = list(Phase.objects.all().order_by('order').values('phase_id', 'name', 'colour', 'bg'))
 
     formatted_phases = []
@@ -152,9 +173,16 @@ def import_tasks(request):
 
                 phase = Phase.objects.filter(phase_id=phase_id).first()
                 if not phase:
+                    # Look up matching default phase color/bg if available
+                    matched = next((p for p in DEFAULT_PHASES if p[0] == phase_id), None)
+                    p_name = matched[1] if matched else f"Phase {phase_id}"
+                    p_col = matched[2] if matched else '#3b82f6'
+                    p_bg = matched[3] if matched else '#dbeafe'
+                    p_ord = matched[4] if matched else 99
+
                     phase, _ = Phase.objects.get_or_create(
-                        phase_id=phase_id or 'phase-1',
-                        defaults={'name': f"Phase {phase_id or 1}", 'colour': '#3b82f6', 'bg': '#dbeafe', 'order': 1}
+                        phase_id=phase_id or 'setup',
+                        defaults={'name': p_name, 'colour': p_col, 'bg': p_bg, 'order': p_ord}
                     )
 
                 Task.objects.create(

@@ -15,8 +15,26 @@ def index(request):
     return render(request, 'scheduler/index.html', {'app_mode': mode})
 
 
+DEFAULT_CATEGORIES = [
+    ('mbua514', 'MBUA514', '#E63946', '#FFE0E3', 0),
+    ('mbua532', 'MBUA532', '#457B9D', '#D4E8F5', 1),
+    ('group', 'BDO Project', '#2A9D8F', '#D1F0EB', 2),
+]
+
+def ensure_default_categories():
+    if not Category.objects.exists():
+        for cid, name, color, bg, order in DEFAULT_CATEGORIES:
+            Category.objects.create(
+                cat_id=cid,
+                name=name,
+                color=color,
+                bg=bg,
+                sort_order=order
+            )
+
 def get_scheduler_data(request):
     """Return all scheduler data as JSON."""
+    ensure_default_categories()
     categories = list(Category.objects.all().values(
         'cat_id', 'name', 'color', 'bg', 'sort_order'))
 

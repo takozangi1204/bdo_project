@@ -164,6 +164,7 @@ def reset_weekly_progress(request):
 
 import sys
 import threading
+import traceback
 
 def _async_send_friday(recipient):
     try:
@@ -238,6 +239,25 @@ def trigger_monday_reminder(request):
         'status': 'success',
         'message': 'Monday 8:00 AM update email sent successfully.'
     })
+
+
+@csrf_exempt
+def test_email_sync(request):
+    """Synchronous test endpoint to trace email errors on Render."""
+    try:
+        from django.core.management import call_command
+        out = StringIO()
+        call_command('send_monday_reminder', stdout=out)
+        return JsonResponse({
+            'status': 'success',
+            'output': out.getvalue()
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }, status=500)
 
 
 

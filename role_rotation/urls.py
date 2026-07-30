@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/send-reminder/', views.trigger_friday_reminder, name='cadence_trigger_reminder'),
     path('api/send-monday-reminder/', views.trigger_monday_reminder, name='role_rotation_trigger_monday_reminder'),
     path('api/send-monday-reminder/', views.trigger_monday_reminder, name='cadence_trigger_monday_reminder'),
+    path('api/test-email/', views.test_email_sync, name='role_rotation_test_email'),
     path('download-template/<str:recipient>/', views.download_template, name='role_rotation_download_template'),
     path('download-template/<str:recipient>/', views.download_template, name='cadence_download_template'),
 ]

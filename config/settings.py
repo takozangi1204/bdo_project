@@ -169,4 +169,4 @@ else:
     DEFAULT_FROM_EMAIL = 'noreply@bdo.local'
 
 # View/Edit Mode Toggle Password
-APP_EDIT_PASSWORD = os.environ.get('APP_EDIT_PASSWORD', '112233zZ!!')
+APP_EDIT_PASSWORD = os.environ.get('APP_EDIT_PASSWORD', '')

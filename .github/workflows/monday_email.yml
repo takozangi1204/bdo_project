@@ -2,8 +2,8 @@ name: Send Monday Email Reminder
 
 on:
   schedule:
-    # Test cron (2 minutes from now)
-    - cron: '11,12,13 4 * * *'
+    # Every Monday 8:00 AM NZST (Sunday 20:00 UTC)
+    - cron: '0 20 * * 0'
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:

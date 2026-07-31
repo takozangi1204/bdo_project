@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: Trigger Email Endpoint on Render
         run: |
-          curl -i -X POST https://bdo-project.onrender.com/role_rotation/api/send-monday-reminder/
+          curl -i -X POST https://bdo-project-app.onrender.com/role_rotation/api/send-monday-reminder/
 
 

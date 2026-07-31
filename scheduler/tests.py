@@ -168,3 +168,36 @@ class SchedulerAPITests(TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(Todo.objects.count(), 0)
 
+    def test_delete_selected_category_items(self):
+        cat2 = Category.objects.create(
+            cat_id='mbua532',
+            name='MBUA532',
+            color='#457B9D',
+            bg='#D4E8F5',
+            sort_order=2
+        )
+        # Create events & todos in both categories
+        Event.objects.create(event_id='e1', date='2026-08-01', category=self.cat, title='Cat 1 Event')
+        Event.objects.create(event_id='e2', date='2026-08-02', category=cat2, title='Cat 2 Event')
+        Todo.objects.create(todo_id='t1', date='2026-08-01', category=self.cat, title='Cat 1 Todo')
+        Todo.objects.create(todo_id='t2', date='2026-08-02', category=cat2, title='Cat 2 Todo')
+
+        # Delete items of cat1 only
+        res = self.client.post(
+            reverse('scheduler_delete_category_items'),
+            data=json.dumps({'category_ids': ['mbua514']}),
+            content_type='application/json'
+        )
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(data['deleted_events'], 1)
+        self.assertEqual(data['deleted_todos'], 1)
+
+        # Cat 1 items deleted, Cat 2 items remain
+        self.assertFalse(Event.objects.filter(event_id='e1').exists())
+        self.assertFalse(Todo.objects.filter(todo_id='t1').exists())
+        self.assertTrue(Event.objects.filter(event_id='e2').exists())
+        self.assertTrue(Todo.objects.filter(todo_id='t2').exists())
+
+

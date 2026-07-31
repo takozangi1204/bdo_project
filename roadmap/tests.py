@@ -173,6 +173,83 @@ class RoadmapAPITestCase(TestCase):
         res = client.post(reverse('save_task'), data=json.dumps({'name': 'Task'}), content_type='application/json')
         self.assertEqual(res.status_code, 403)
 
+    def test_reorder_tasks_api_and_persistence(self):
+        task2 = Task.objects.create(
+            title='Second Task',
+            phase=self.phase_setup,
+            start_date='2026-07-13',
+            end_date='2026-07-20',
+            status='todo',
+            order=2
+        )
+        
+        payload = {
+            'task_orders': [
+                {'id': str(task2.id), 'order': 1, 'phaseId': 'setup'},
+                {'id': str(self.task1.id), 'order': 2, 'phaseId': 'setup'}
+            ]
+        }
+        res = self.client.post(
+            reverse('reorder_tasks'),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json()['status'], 'success')
+
+        tasks_in_db = list(Task.objects.all().order_by('order'))
+        self.assertEqual(tasks_in_db[0].id, task2.id)
+        self.assertEqual(tasks_in_db[1].id, self.task1.id)
+
+        update_payload = {
+            'id': str(task2.id),
+            'name': 'Second Task Extended',
+            'phaseId': 'setup',
+            'startDate': '2026-07-13',
+            'endDate': '2026-07-25',
+            'status': 'todo'
+        }
+        res_save = self.client.post(
+            reverse('save_task'),
+            data=json.dumps(update_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(res_save.status_code, 200)
+
+        data = self.client.get(reverse('get_data')).json()
+        fetched_task_ids = [t['id'] for t in data['tasks']]
+        self.assertEqual(fetched_task_ids, [str(task2.id), str(self.task1.id)])
+
+    def test_new_task_order_in_phase(self):
+        phase_ideate = Phase.objects.create(
+            phase_id='ideate',
+            name='Ideate',
+            colour='#E8837C',
+            bg='#FFE5E2',
+            order=4
+        )
+        t1_payload = {
+            'name': 'Ideate Task 1',
+            'phaseId': 'ideate',
+            'startDate': '2026-08-01',
+            'endDate': '2026-08-05'
+        }
+        self.client.post(reverse('save_task'), data=json.dumps(t1_payload), content_type='application/json')
+
+        t2_payload = {
+            'name': 'Ideate Task 2',
+            'phaseId': 'ideate',
+            'startDate': '2026-08-06',
+            'endDate': '2026-08-10'
+        }
+        self.client.post(reverse('save_task'), data=json.dumps(t2_payload), content_type='application/json')
+
+        ideate_tasks = list(Task.objects.filter(phase=phase_ideate).order_by('order'))
+        self.assertEqual(len(ideate_tasks), 2)
+        self.assertEqual(ideate_tasks[0].title, 'Ideate Task 1')
+        self.assertEqual(ideate_tasks[1].title, 'Ideate Task 2')
+        self.assertGreater(ideate_tasks[1].order, ideate_tasks[0].order)
+
 
 
 

@@ -1534,13 +1534,27 @@
                         const [movedTask] = regularTasks.splice(curIdx, 1);
                         regularTasks.splice(targetIdx, 0, movedTask);
 
+                        // If moved near another phase group, inherit that phase
+                        const refIdx = targetIdx > 0 ? targetIdx - 1 : (regularTasks.length > 1 ? 1 : 0);
+                        if (regularTasks[refIdx]) {
+                            movedTask.phaseId = regularTasks[refIdx].phaseId;
+                        }
+
+                        // Update order per phase
+                        const phaseCounters = {};
+                        regularTasks.forEach((t) => {
+                            if (!phaseCounters[t.phaseId]) phaseCounters[t.phaseId] = 0;
+                            phaseCounters[t.phaseId]++;
+                            t.order = phaseCounters[t.phaseId];
+                        });
+
                         const milestones = tasks.filter(t => t.phaseId === 'milestone');
                         tasks = [...regularTasks, ...milestones];
                         renderGantt();
                     }
                 };
 
-                const onMouseUp = () => {
+                const onMouseUp = async () => {
                     window.removeEventListener('mousemove', onMouseMove);
                     window.removeEventListener('mouseup', onMouseUp);
 
@@ -1554,7 +1568,33 @@
                     if (taskRow) taskRow.classList.remove('dragging');
 
                     if (hasDragged) {
-                        toast('Task order updated', 'success');
+                        const phaseCounters = {};
+                        const taskOrders = regularTasks.map((t) => {
+                            if (!phaseCounters[t.phaseId]) phaseCounters[t.phaseId] = 0;
+                            phaseCounters[t.phaseId]++;
+                            t.order = phaseCounters[t.phaseId];
+                            return {
+                                id: t.id,
+                                order: t.order,
+                                phaseId: t.phaseId
+                            };
+                        });
+                        try {
+                            const res = await fetch('/api/tasks/reorder/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ task_orders: taskOrders })
+                            });
+                            if (res.ok) {
+                                toast('Task order updated', 'success');
+                            } else {
+                                toast('Failed to save task order', 'warn');
+                                autoLoad();
+                            }
+                        } catch (err) {
+                            toast('Server connection error', 'warn');
+                            autoLoad();
+                        }
                     }
                 };
 
@@ -1646,7 +1686,8 @@
                                 startDate: newStartDate,
                                 endDate: newEndDate,
                                 status: task.status || 'todo',
-                                deliverables: task.deliverables || ''
+                                deliverables: task.deliverables || '',
+                                order: task.order
                             };
 
                             try {
@@ -1691,14 +1732,22 @@
             });
 
             const phaseCounter = {};
-            const regularTasks = tasks.filter(t => t.phaseId !== 'milestone').map(t => {
+            const sortedTasks = [...tasks].sort((a, b) => {
+                const pIndexA = PHASES.findIndex(p => p.id === a.phaseId);
+                const pIndexB = PHASES.findIndex(p => p.id === b.phaseId);
+                if (pIndexA !== pIndexB) {
+                    return pIndexA - pIndexB;
+                }
+                return (a.order || 0) - (b.order || 0);
+            });
+            const regularTasks = sortedTasks.filter(t => t.phaseId !== 'milestone').map(t => {
                 if (!phaseCounter[t.phaseId]) phaseCounter[t.phaseId] = 0;
                 phaseCounter[t.phaseId]++;
                 const phaseIndex = PHASES.findIndex(phase => phase.id === t.phaseId) + 1;
                 t.displayName = `${phaseIndex}.${phaseCounter[t.phaseId]} ${t.name}`;
                 return t;
             });
-            const milestones = tasks.filter(t => t.phaseId === 'milestone');
+            const milestones = sortedTasks.filter(t => t.phaseId === 'milestone');
 
             // Build Headers & Rows HTML
             let html = '';

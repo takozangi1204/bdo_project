@@ -1166,7 +1166,7 @@
         </svg>
         Import JSON
       </button>
-      <button class="btn btn-primary" onclick="saveJSON()" title="Export data to JSON file">
+      <button class="btn btn-primary" onclick="openExportModal()" title="Export data to JSON file">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
         </svg>
@@ -1358,12 +1358,46 @@
         <button class="btn" id="addCatBtn" onclick="addCategory()" style="width:100%; margin-top:14px; justify-content:center; color:var(--text); border:1px dashed var(--border); background:#fafbfc;">
           + Add Category
         </button>
+        <button class="btn edit-only" onclick="openDeleteCategoryItemsModal()" style="width:100%; margin-top:10px; justify-content:center; color:#E63946; border:1px solid #ffcdd2; background:#fff5f5; font-size:0.82rem; font-weight:600;">
+          🗑️ Delete Items in Selected Categories...
+        </button>
       </div>
       <div class="modal-foot">
         <button class="btn btn-accent" onclick="saveCategoriesAndClose()">Done</button>
       </div>
     </div>
   </div>
+
+  <!-- ═══════════════════ DELETE CATEGORY ITEMS MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="deleteCategoryItemsModal">
+    <div class="modal" style="width: 460px;">
+      <div class="modal-head">
+        <h2>🗑️ Delete Items by Category</h2>
+        <p>Select categories to permanently delete all associated events and to-dos.</p>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <label style="font-weight: 700; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Select Categories to Clear</label>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="legend-action-btn" onclick="setDeleteCategorySelection(true)" style="padding: 2px 8px; font-size: 0.72rem;">Select All</button>
+            <button type="button" class="legend-action-btn" onclick="setDeleteCategorySelection(false)" style="padding: 2px 8px; font-size: 0.72rem;">Deselect All</button>
+            <button type="button" class="legend-action-btn" onclick="selectActiveFilterCategories()" style="padding: 2px 8px; font-size: 0.72rem; color: #6c5ce7; border-color: #dcd6f7;" title="Select categories currently visible in legend filter">Active Filters</button>
+          </div>
+        </div>
+        <div id="deleteCategoryList" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: #fafbfc; margin-bottom: 14px;">
+          <!-- Category checkboxes populated dynamically -->
+        </div>
+        <div style="padding: 10px 12px; background: #FFF0F0; border-left: 4px solid #E63946; border-radius: 4px; font-size: 0.8rem; color: #900;">
+          <strong>⚠️ Danger Zone:</strong> All events and to-do tasks belonging to the checked category/categories will be permanently deleted. The categories themselves will not be removed.
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" style="background:#eee; color:var(--text)" onclick="closeModal('deleteCategoryItemsModal')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDeleteCategoryItems()">Confirm Delete Items</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ═══════════════════ SETTINGS MODAL ═══════════════════ -->
   <div class="modal-backdrop" id="settingsModal">
@@ -1403,6 +1437,40 @@
       <div class="modal-foot">
         <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('settingsModal')">Cancel</button>
         <button class="btn btn-accent" onclick="saveSettingsAndClose()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ EXPORT JSON MODAL ═══════════════════ -->
+  <div class="modal-backdrop" id="exportModal">
+    <div class="modal" style="width: 440px;">
+      <div class="modal-head">
+        <h2>📥 Export JSON Data</h2>
+        <p>Select which categories to include in the exported file.</p>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <label style="font-weight: 700; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Categories to Export</label>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="legend-action-btn" onclick="setExportCategorySelection(true)" style="padding: 2px 8px; font-size: 0.72rem;">Select All</button>
+            <button type="button" class="legend-action-btn" onclick="setExportCategorySelection(false)" style="padding: 2px 8px; font-size: 0.72rem;">Deselect All</button>
+          </div>
+        </div>
+        <div id="exportCategoryList" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding: 6px; border: 1px solid var(--border); border-radius: 8px; background: #fafbfc; margin-bottom: 14px;">
+          <!-- Category checkboxes populated dynamically -->
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); background: #f0f4f8; padding: 10px 12px; border-radius: 8px; border: 1px solid #d4e8f5;">
+          💡 <strong>Tip:</strong> Only events and to-do tasks belonging to the selected categories will be saved to the JSON file.
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" style="background:#eee;color:var(--text)" onclick="closeModal('exportModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmExportJSON()" style="background: #6c5ce7; color: #fff;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Download JSON
+        </button>
       </div>
     </div>
   </div>
@@ -1696,7 +1764,50 @@
     /* ────────────────────────────────────────────────────
        JSON SAVE / LOAD (file export/import)
        ──────────────────────────────────────────────────── */
-    function saveJSON() {
+    function openExportModal() {
+      const container = document.getElementById('exportCategoryList');
+      container.innerHTML = '';
+      if (CATEGORIES.length === 0) {
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); padding:10px; text-align:center;">No categories available</div>';
+      } else {
+        CATEGORIES.forEach(c => {
+          const item = document.createElement('label');
+          item.style.cssText = `
+            display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+            border-radius: 6px; background: #ffffff; border: 1px solid var(--border);
+            cursor: pointer; user-select: none; font-size: 0.84rem; font-weight: 500;
+          `;
+          const isChecked = visibleCategories.has(c.id);
+          item.innerHTML = `
+            <input type="checkbox" class="export-cat-check" value="${c.id}" ${isChecked ? 'checked' : ''} style="width: 16px; height: 16px; accent-color: #6c5ce7; cursor: pointer;">
+            <span style="width: 10px; height: 10px; border-radius: 50%; background: ${c.color}; display: inline-block;"></span>
+            <span>${c.name}</span>
+          `;
+          container.appendChild(item);
+        });
+      }
+      openModal('exportModal');
+    }
+
+    function setExportCategorySelection(selectAll) {
+      document.querySelectorAll('#exportCategoryList .export-cat-check').forEach(chk => {
+        chk.checked = selectAll;
+      });
+    }
+
+    function confirmExportJSON() {
+      const checkedInputs = document.querySelectorAll('#exportCategoryList .export-cat-check:checked');
+      if (checkedInputs.length === 0) {
+        toast('Please select at least one category to export', 'warn');
+        return;
+      }
+
+      const selectedCatIds = new Set(Array.from(checkedInputs).map(chk => chk.value));
+      saveJSON(selectedCatIds);
+      closeModal('exportModal');
+    }
+
+    function saveJSON(selectedCatIds = null) {
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -1705,10 +1816,20 @@
       const min = String(now.getMinutes()).padStart(2, '0');
       const fileName = `${yyyy}${mm}${dd}_${hh}${min}_schedulerdata.json`;
 
+      let exportEvents = events;
+      let exportTodos = todos;
+      let exportCategories = CATEGORIES;
+
+      if (selectedCatIds && selectedCatIds.size > 0) {
+        exportEvents = events.filter(e => selectedCatIds.has(e.catId));
+        exportTodos = todos.filter(t => selectedCatIds.has(t.catId));
+        exportCategories = CATEGORIES.filter(c => selectedCatIds.has(c.id));
+      }
+
       const dataToSave = {
-        events: events,
-        categories: CATEGORIES,
-        todos: todos,
+        events: exportEvents,
+        categories: exportCategories,
+        todos: exportTodos,
         settings: appSettings,
         exportedAt: now.toISOString(),
       };
@@ -1718,7 +1839,7 @@
       a.download = fileName;
       a.click();
       URL.revokeObjectURL(a.href);
-      toast('Data saved as JSON', 'success');
+      toast(`Exported ${exportEvents.length} event(s) & ${exportTodos.length} to-do(s) as JSON`, 'success');
     }
 
     async function loadJSON(e) {
@@ -1790,6 +1911,15 @@
       hideAllBtn.textContent = 'Hide All';
       hideAllBtn.addEventListener('click', () => setAllCategoryFilters(false));
       bar.appendChild(hideAllBtn);
+
+      const deleteItemsBtn = document.createElement('button');
+      deleteItemsBtn.className = 'legend-action-btn edit-only';
+      deleteItemsBtn.style.color = '#e63946';
+      deleteItemsBtn.style.borderColor = '#ffcdd2';
+      deleteItemsBtn.innerHTML = '🗑️ Delete Category Items';
+      deleteItemsBtn.title = 'Delete all events and tasks in selected categories';
+      deleteItemsBtn.addEventListener('click', () => openDeleteCategoryItemsModal());
+      bar.appendChild(deleteItemsBtn);
 
       const br = document.createElement('span');
       br.className = 'legend-break';
@@ -1974,6 +2104,99 @@
       renderCalendar();
       closeModal('catModal');
       toast('Categories updated', 'success');
+    }
+
+    /* ────────────────────────────────────────────────────
+       DELETE CATEGORY ITEMS
+       ──────────────────────────────────────────────────── */
+    function openDeleteCategoryItemsModal() {
+      closeModal('catModal');
+      renderDeleteCategoryList();
+      openModal('deleteCategoryItemsModal');
+    }
+
+    function renderDeleteCategoryList() {
+      const container = document.getElementById('deleteCategoryList');
+      container.innerHTML = '';
+
+      if (!CATEGORIES || CATEGORIES.length === 0) {
+        container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:12px;">No categories found.</div>';
+        return;
+      }
+
+      CATEGORIES.forEach(cat => {
+        const catEventsCount = events.filter(e => e.catId === cat.id).length;
+        const catTodosCount = todos.filter(t => t.catId === cat.id).length;
+        const totalItems = catEventsCount + catTodosCount;
+
+        const isChecked = visibleCategories.has(cat.id);
+
+        const row = document.createElement('label');
+        row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; padding:6px 10px; background:#fff; border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:0.85rem; user-select:none; transition:var(--transition);';
+        
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" class="delete-cat-check" value="${cat.id}" ${isChecked ? 'checked' : ''} style="cursor:pointer; width:15px; height:15px; accent-color:#E63946;">
+            <span style="width:12px; height:12px; border-radius:50%; background:${cat.bg}; border:2px solid ${cat.color}; flex-shrink:0;"></span>
+            <span style="font-weight:600; color:var(--text);">${cat.name}</span>
+          </div>
+          <span style="font-size:0.75rem; font-weight:500; padding:2px 8px; border-radius:10px; background:${totalItems > 0 ? '#FFE0E3' : '#f0f0f0'}; color:${totalItems > 0 ? '#E63946' : '#888'};">
+            ${catEventsCount} event(s), ${catTodosCount} task(s)
+          </span>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function setDeleteCategorySelection(selectAll) {
+      document.querySelectorAll('#deleteCategoryList .delete-cat-check').forEach(chk => {
+        chk.checked = selectAll;
+      });
+    }
+
+    function selectActiveFilterCategories() {
+      document.querySelectorAll('#deleteCategoryList .delete-cat-check').forEach(chk => {
+        chk.checked = visibleCategories.has(chk.value);
+      });
+    }
+
+    async function confirmDeleteCategoryItems() {
+      const checkedInputs = document.querySelectorAll('#deleteCategoryList .delete-cat-check:checked');
+      if (checkedInputs.length === 0) {
+        toast('Please select at least one category to clear', 'warn');
+        return;
+      }
+
+      const selectedCatIds = Array.from(checkedInputs).map(chk => chk.value);
+      const selectedNames = CATEGORIES.filter(c => selectedCatIds.includes(c.id)).map(c => c.name).join(', ');
+
+      if (!confirm(`Are you sure you want to delete all events and tasks in category(ies): ${selectedNames}?`)) {
+        return;
+      }
+
+      try {
+        const res = await apiFetch('/category-items/delete/', {
+          method: 'POST',
+          body: JSON.stringify({ category_ids: selectedCatIds })
+        });
+
+        if (res && res.status === 'success') {
+          const deletedEvents = res.deleted_events || 0;
+          const deletedTodos = res.deleted_todos || 0;
+          const catSet = new Set(selectedCatIds);
+
+          events = events.filter(e => !catSet.has(e.catId));
+          todos = todos.filter(t => !catSet.has(t.catId));
+
+          renderCalendar();
+          closeModal('deleteCategoryItemsModal');
+          toast(`Deleted ${deletedEvents} event(s) and ${deletedTodos} task(s)`, 'warn');
+        } else {
+          toast(res.message || 'Failed to delete items', 'warn');
+        }
+      } catch (err) {
+        toast(err.message || 'An error occurred during deletion', 'warn');
+      }
     }
 
     /* ────────────────────────────────────────────────────

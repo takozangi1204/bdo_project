@@ -38,8 +38,12 @@ class Task(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
     deliverables = models.TextField(blank=True, null=True)
+    order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['phase__order', 'order', 'id']
 
     def __str__(self):
         return f'{self.title} ({self.phase.name})'

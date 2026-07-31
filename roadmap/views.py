@@ -47,7 +47,7 @@ def get_roadmap_data(request):
             'bg': p['bg'],
         })
     
-    tasks = Task.objects.select_related('phase').all()
+    tasks = Task.objects.select_related('phase').all().order_by('phase__order', 'order', 'id')
     formatted_tasks = []
     for t in tasks:
         formatted_tasks.append({
@@ -58,6 +58,7 @@ def get_roadmap_data(request):
             'endDate': t.end_date.strftime('%Y-%m-%d'),
             'status': t.status,
             'deliverables': t.deliverables or '',
+            'order': t.order,
         })
     
     return JsonResponse({'phases': formatted_phases, 'tasks': formatted_tasks})
@@ -96,15 +97,25 @@ def save_task(request):
             task.end_date = end_date
             task.status = status 
             task.deliverables = deliverables
+            if 'order' in data and data['order'] is not None:
+                task.order = data['order']
             task.save() 
         else:
+            if 'order' in data and data['order'] is not None:
+                task_order = data['order']
+            else:
+                from django.db.models import Max
+                max_order = Task.objects.filter(phase=phase).aggregate(Max('order'))['order__max']
+                task_order = (max_order + 1) if max_order is not None else 1
+
             task = Task.objects.create(
                 title = name,
                 phase = phase,
                 start_date = start_date,
                 end_date = end_date,
                 status = status,
-                deliverables = deliverables
+                deliverables = deliverables,
+                order = task_order
             )
         
         return JsonResponse({'status': 'success', 'id': str(task.id)})
@@ -128,6 +139,46 @@ def delete_task(request, task_id):
     
     try:
         Task.objects.filter(id=task_id).delete()
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+@csrf_exempt
+def reorder_tasks(request):
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Method not allowed'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
+    
+    try:
+        data = json.loads(request.body)
+        task_orders = data.get('task_orders', []) if isinstance(data, dict) else data
+        if not isinstance(task_orders, list):
+            return JsonResponse({'status': 'error', 'message': 'task_orders must be a list'}, status=400)
+        
+        with transaction.atomic():
+            for idx, item in enumerate(task_orders):
+                if isinstance(item, dict):
+                    t_id = item.get('id')
+                    order_val = item.get('order', idx + 1)
+                    phase_id = item.get('phaseId')
+                else:
+                    t_id = str(item)
+                    order_val = idx + 1
+                    phase_id = None
+
+                if not t_id:
+                    continue
+
+                update_kwargs = {'order': order_val}
+                if phase_id:
+                    p = Phase.objects.filter(phase_id=phase_id).first()
+                    if p:
+                        update_kwargs['phase'] = p
+                
+                Task.objects.filter(id=t_id).update(**update_kwargs)
+                
         return JsonResponse({'status': 'success'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
@@ -160,6 +211,7 @@ def import_tasks(request):
             if clear_existing:
                 Task.objects.all().delete()
                 
+            phase_order_counter = {}
             for item in tasks_data:
                 name = item.get('name') or item.get('title')
                 phase_id = item.get('phaseId') or item.get('phase_id') or item.get('phase')
@@ -185,13 +237,22 @@ def import_tasks(request):
                         defaults={'name': p_name, 'colour': p_col, 'bg': p_bg, 'order': p_ord}
                     )
 
+                p_key = phase.phase_id
+                if p_key not in phase_order_counter:
+                    from django.db.models import Max
+                    max_o = Task.objects.filter(phase=phase).aggregate(Max('order'))['order__max']
+                    phase_order_counter[p_key] = max_o if max_o is not None else 0
+                phase_order_counter[p_key] += 1
+                item_order = item.get('order', phase_order_counter[p_key])
+
                 Task.objects.create(
                     title=name,
                     phase=phase,
                     start_date=start_date,
                     end_date=end_date,
                     status=status,
-                    deliverables=deliverables
+                    deliverables=deliverables,
+                    order=item_order
                 )
                 imported_count += 1
 

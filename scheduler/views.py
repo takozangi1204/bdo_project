@@ -268,6 +268,36 @@ def save_categories(request):
 
 
 @csrf_exempt
+def delete_selected_category_items(request):
+    """Delete all events and todos in selected categories."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+    blocked = require_edit_mode(request)
+    if blocked:
+        return blocked
+
+    try:
+        data = json.loads(request.body)
+        cat_ids = data.get('category_ids', [])
+        if not isinstance(cat_ids, list) or not cat_ids:
+            return JsonResponse({'status': 'error', 'message': 'No categories selected'}, status=400)
+
+        with transaction.atomic():
+            event_count, _ = Event.objects.filter(category_id__in=cat_ids).delete()
+            todo_count, _ = Todo.objects.filter(category_id__in=cat_ids).delete()
+
+        return JsonResponse({
+            'status': 'success',
+            'deleted_events': event_count,
+            'deleted_todos': todo_count,
+            'deleted_categories': cat_ids,
+        })
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+
+
+@csrf_exempt
 def save_settings(request):
     """Save settings and break periods."""
     if request.method != 'POST':

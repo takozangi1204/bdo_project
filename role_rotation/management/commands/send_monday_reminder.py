@@ -36,30 +36,52 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         recipient = options['recipient']
 
-        current_week = "Week 4"
+        import datetime
+        today = datetime.date.today()
+        week1_monday = datetime.date(2026, 7, 6)
+        days_diff = (today - week1_monday).days
+        current_week_num = max(1, min(12, (days_diff // 7) + 1))
+        current_week = f"Week {current_week_num}"
 
         summary_rotation = [
-            {'week': 'Week 1', 'writer': 'Ding', 'deadline': 'Sun, 12 Jul, 11:59 PM', 'past': True},
-            {'week': 'Week 2', 'writer': 'Sarala', 'deadline': 'Sun, 19 Jul, 11:59 PM', 'past': True},
-            {'week': 'Week 3', 'writer': 'Suhani', 'deadline': 'Sun, 26 Jul, 11:59 PM', 'past': True},
-            {'week': 'Week 4', 'writer': 'Taiki', 'deadline': 'Sun, 2 Aug, 11:59 PM', 'current': True},
-            {'week': 'Week 5', 'writer': 'Yusuf', 'deadline': 'Sun, 9 Aug, 11:59 PM'},
-            {'week': 'Week 6', 'writer': 'Ding', 'deadline': 'Sun, 16 Aug, 11:59 PM'},
-            {'week': 'Week 7', 'writer': 'Sarala', 'deadline': 'Sun, 23 Aug, 11:59 PM'},
-            {'week': 'Week 8', 'writer': 'Suhani', 'deadline': 'Sun, 30 Aug, 11:59 PM'},
-            {'week': 'Week 9', 'writer': 'Taiki', 'deadline': 'Sun, 6 Sep, 11:59 PM'},
-            {'week': 'Week 10', 'writer': 'No Need to Submit', 'deadline': 'N/A'},
-            {'week': 'Week 11', 'writer': 'No Need to Submit', 'deadline': 'N/A'},
+            {'week_num': 1, 'week': 'Week 1', 'writer': 'Ding', 'deadline_date': datetime.date(2026, 7, 12), 'deadline': 'Sun, 12 Jul, 11:59 PM'},
+            {'week_num': 2, 'week': 'Week 2', 'writer': 'Sarala', 'deadline_date': datetime.date(2026, 7, 19), 'deadline': 'Sun, 19 Jul, 11:59 PM'},
+            {'week_num': 3, 'week': 'Week 3', 'writer': 'Suhani', 'deadline_date': datetime.date(2026, 7, 26), 'deadline': 'Sun, 26 Jul, 11:59 PM'},
+            {'week_num': 4, 'week': 'Week 4', 'writer': 'Taiki', 'deadline_date': datetime.date(2026, 8, 2), 'deadline': 'Sun, 2 Aug, 11:59 PM'},
+            {'week_num': 5, 'week': 'Week 5', 'writer': 'Yusuf', 'deadline_date': datetime.date(2026, 8, 9), 'deadline': 'Sun, 9 Aug, 11:59 PM'},
+            {'week_num': 6, 'week': 'Week 6', 'writer': 'Ding', 'deadline_date': datetime.date(2026, 8, 16), 'deadline': 'Sun, 16 Aug, 11:59 PM'},
+            {'week_num': 7, 'week': 'Week 7', 'writer': 'Sarala', 'deadline_date': datetime.date(2026, 8, 23), 'deadline': 'Sun, 23 Aug, 11:59 PM'},
+            {'week_num': 8, 'week': 'Week 8', 'writer': 'Suhani', 'deadline_date': datetime.date(2026, 8, 30), 'deadline': 'Sun, 30 Aug, 11:59 PM'},
+            {'week_num': 9, 'week': 'Week 9', 'writer': 'Taiki', 'deadline_date': datetime.date(2026, 9, 6), 'deadline': 'Sun, 6 Sep, 11:59 PM'},
+            {'week_num': 10, 'week': 'Week 10', 'writer': 'No Need to Submit', 'deadline_date': None, 'deadline': 'N/A'},
+            {'week_num': 11, 'week': 'Week 11', 'writer': 'No Need to Submit', 'deadline_date': None, 'deadline': 'N/A'},
         ]
 
         meeting_rotation = [
-            {'dateTime': '<strong>Week 2</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(16 Jul, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala', 'past': True},
-            {'dateTime': '<strong>Week 4</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(30 Jul, 2:00 PM)</span>', 'chair': 'Taiki', 'asking': 'Yusuf', 'notes': 'Ding', 'agenda': 'Sarala', 'resting': 'Suhani', 'current': True},
-            {'dateTime': '<strong>Week 6</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(11 Aug, 11:00 AM)</span>', 'chair': 'Yusuf', 'asking': 'Ding', 'notes': 'Sarala', 'agenda': 'Suhani', 'resting': 'Taiki'},
-            {'dateTime': '<strong>Week 8</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(27 Aug, 2:00 PM)</span>', 'chair': 'Ding', 'asking': 'Sarala', 'notes': 'Suhani', 'agenda': 'Taiki', 'resting': 'Yusuf'},
-            {'dateTime': '<strong>Week 11</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(17 Sep, 2:00 PM)</span>', 'chair': 'Sarala', 'asking': 'Suhani', 'notes': 'Taiki', 'agenda': 'Yusuf', 'resting': 'Ding'},
-            {'dateTime': '<strong>Week 12</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(24 Sep, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
+            {'week_num': 2, 'meeting_date': datetime.date(2026, 7, 16), 'date_label': '16 Jul, 2:00 PM', 'dateTime': '<strong>Week 2</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(16 Jul, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
+            {'week_num': 4, 'meeting_date': datetime.date(2026, 7, 30), 'date_label': '30 Jul, 2:00 PM', 'dateTime': '<strong>Week 4</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(30 Jul, 2:00 PM)</span>', 'chair': 'Taiki', 'asking': 'Yusuf', 'notes': 'Ding', 'agenda': 'Sarala', 'resting': 'Suhani'},
+            {'week_num': 6, 'meeting_date': datetime.date(2026, 8, 11), 'date_label': '11 Aug, 11:00 AM', 'dateTime': '<strong>Week 6</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(11 Aug, 11:00 AM)</span>', 'chair': 'Yusuf', 'asking': 'Ding', 'notes': 'Sarala', 'agenda': 'Suhani', 'resting': 'Taiki'},
+            {'week_num': 8, 'meeting_date': datetime.date(2026, 8, 27), 'date_label': '27 Aug, 2:00 PM', 'dateTime': '<strong>Week 8</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(27 Aug, 2:00 PM)</span>', 'chair': 'Ding', 'asking': 'Sarala', 'notes': 'Suhani', 'agenda': 'Taiki', 'resting': 'Yusuf'},
+            {'week_num': 11, 'meeting_date': datetime.date(2026, 9, 17), 'date_label': '17 Sep, 2:00 PM', 'dateTime': '<strong>Week 11</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(17 Sep, 2:00 PM)</span>', 'chair': 'Sarala', 'asking': 'Suhani', 'notes': 'Taiki', 'agenda': 'Yusuf', 'resting': 'Ding'},
+            {'week_num': 12, 'meeting_date': datetime.date(2026, 9, 24), 'date_label': '24 Sep, 2:00 PM', 'dateTime': '<strong>Week 12</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(24 Sep, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
         ]
+
+        for r in summary_rotation:
+            if r['week_num'] < current_week_num:
+                r['past'] = True
+            elif r['week_num'] == current_week_num:
+                r['current'] = True
+
+        found_upcoming = False
+        for m in meeting_rotation:
+            if m['meeting_date'] < today:
+                m['past'] = True
+            elif not found_upcoming:
+                m['current'] = True
+                found_upcoming = True
+
+        curr_summary = next((r for r in summary_rotation if r.get('current')), summary_rotation[-1])
+        curr_meeting = next((m for m in meeting_rotation if m.get('current')), meeting_rotation[-1])
 
         # Build Section 1 HTML Table (ONLY HIGHLIGHTED CURRENT WEEK ROW)
         active_summary = [r for r in summary_rotation if r.get('current')]
@@ -107,10 +129,10 @@ class Command(BaseCommand):
             f"Hello Team,\n\n"
             f"Here is your [BDO MBUA Project] {current_week} Reminder:\n\n"
             f"1. Brief Weekly Report Table:\n"
-            f"Active Writer for {current_week}: Taiki (Internal Deadline: Sun, 2 Aug, 11:59 PM)\n\n"
+            f"Active Writer for {current_week}: {curr_summary['writer']} (Internal Deadline: {curr_summary['deadline']})\n\n"
             f"2. Next Meeting with BDO:\n"
-            f"Upcoming Meeting: Week 4 (30 Jul, 2:00 PM)\n"
-            f"Chairperson: Taiki | Asking: Yusuf | Notes: Ding | Agenda: Sarala | Resting: Suhani\n\n"
+            f"Upcoming Meeting: Week {curr_meeting['week_num']} ({curr_meeting['date_label']})\n"
+            f"Chairperson: {curr_meeting['chair']} | Asking: {curr_meeting['asking']} | Notes: {curr_meeting['notes']} | Agenda: {curr_meeting['agenda']} | Resting: {curr_meeting['resting']}\n\n"
             f"{section3_text}\n"
             f"Check the details: {app_url}\n\n"
             f"Best regards,\nRole Rotation Team"

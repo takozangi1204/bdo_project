@@ -135,7 +135,7 @@ class Command(BaseCommand):
             f"Chairperson: {curr_meeting['chair']} | Asking: {curr_meeting['asking']} | Notes: {curr_meeting['notes']} | Agenda: {curr_meeting['agenda']} | Resting: {curr_meeting['resting']}\n\n"
             f"{section3_text}\n"
             f"Check the details: {app_url}\n\n"
-            f"Best regards,\nRole Rotation Team"
+            f"Best regards,\nGroup Management Team"
         )
 
         html_message = f"""
@@ -181,11 +181,11 @@ class Command(BaseCommand):
               {section3_html}
 
               <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 13px; color: #636e72;">
-                Check the details: <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Role Rotation Dashboard ↗</a>
+                Check the details: <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Group Management Dashboard ↗</a>
               </div>
 
               <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 12px; color: #b2bec3; text-align: center;">
-                BDO MBUA Project • Role Rotation System
+                BDO MBUA Project • Group Management System
               </div>
             </div>
           </body>

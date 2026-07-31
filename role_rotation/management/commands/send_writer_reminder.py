@@ -86,7 +86,7 @@ Dashboard & Templates: {app_url}
 Thank you for leading this week's report!
 
 Best regards,
-Role Rotation App
+Group Management System
 """
 
         html_message = f"""
@@ -119,11 +119,11 @@ Role Rotation App
               </div>
 
               <div style="margin-top: 20px; font-size: 13px; color: #636e72;">
-                <strong>Templates &amp; Details:</strong> <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Role Rotation Dashboard ↗</a>
+                <strong>Templates &amp; Details:</strong> <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Group Management Dashboard ↗</a>
               </div>
 
               <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 12px; color: #b2bec3; text-align: center;">
-                BDO MBUA Project • Role Rotation System
+                BDO MBUA Project • Group Management System
               </div>
             </div>
           </body>

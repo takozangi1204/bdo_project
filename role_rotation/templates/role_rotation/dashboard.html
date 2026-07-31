@@ -1182,7 +1182,10 @@
         }
 
         async function triggerMondayReminder() {
-            showToast('Sending Monday role rotation update to all registered team members...');
+            if (!confirm('Are you sure you want to send the Monday update email to all registered team members?')) {
+                return;
+            }
+            showToast('Sending Monday update to all registered team members...');
             try {
                 const res = await fetch('/role_rotation/api/send-monday-reminder/', {
                     method: 'POST',
@@ -1204,6 +1207,9 @@
         }
 
         async function triggerWriterReminder() {
+            if (!confirm('Are you sure you want to send the reminder email to the assigned Weekly Brief Report writer?')) {
+                return;
+            }
             showToast('Sending targeted reminder to assigned Weekly Brief Report writer...');
             try {
                 const res = await fetch('/role_rotation/api/send-writer-reminder/', {
@@ -1230,6 +1236,9 @@
             const email = input ? input.value.trim() : '';
             if (!email) {
                 showToast('Please enter a recipient email address', 'error');
+                return;
+            }
+            if (!confirm(`Are you sure you want to send the test update email to ${email}?`)) {
                 return;
             }
             showToast(`Sending test Monday update email to ${email}...`);

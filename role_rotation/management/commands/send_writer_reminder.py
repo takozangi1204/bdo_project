@@ -75,15 +75,13 @@ Hello {writer_name},
 
 This is a friendly reminder that you are the assigned writer for the [BDO MBUA Project] Weekly Brief Report for {current_week}.
 
-📌 Internal Deadline: {curr_summary['deadline']}
+Internal Deadline: {curr_summary['deadline']}
 
 Please prepare the report and gather feedback from the team before submission:
 • James (Client): By 5:00 PM, Tuesday
 • Michel (Course Lead): By 10:00 AM, Thursday
 
-📥 Download Templates & Details:
-- Dashboard: {app_url}
-- SharePoint Archive: https://myvuwac.sharepoint.com/:f:/r/sites/MBUA532_f95bf5/Shared%20Documents/General/Weekly%20Brief%20Report/Archive?csf=1&web=1&e=3tS4ZG
+Dashboard & Templates: {app_url}
 
 Thank you for leading this week's report!
 
@@ -108,12 +106,12 @@ Role Rotation App
               </p>
 
               <div style="background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 12px 16px; border-radius: 6px; margin: 16px 0;">
-                <strong style="color: #92400e; font-size: 13px; display: block; margin-bottom: 4px;">📅 Internal Deadline:</strong>
+                <strong style="color: #92400e; font-size: 13px; display: block; margin-bottom: 4px;">Internal Deadline:</strong>
                 <span style="font-size: 14px; font-weight: bold; color: #1a1a2e;">{curr_summary['deadline']}</span>
               </div>
 
               <div style="background: #f8f9fa; border: 1px solid #e2e6ea; padding: 12px 16px; border-radius: 6px; font-size: 13px; color: #2d3436;">
-                <strong>📌 Submission Deadlines:</strong>
+                <strong>Submission Deadlines:</strong>
                 <ul style="margin: 6px 0 0 0; padding-left: 18px; color: #636e72;">
                   <li><strong>James (Client):</strong> Tuesday by 5:00 PM</li>
                   <li><strong>Michel (Course Lead):</strong> Thursday by 10:00 AM</li>
@@ -121,11 +119,7 @@ Role Rotation App
               </div>
 
               <div style="margin-top: 20px; font-size: 13px; color: #636e72;">
-                📄 <strong>Templates &amp; Details:</strong> <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Role Rotation Dashboard ↗</a>
-              </div>
-
-              <div style="margin-top: 8px; font-size: 13px; color: #636e72;">
-                📁 <strong>SharePoint Report Archive:</strong> <a href="https://myvuwac.sharepoint.com/:f:/r/sites/MBUA532_f95bf5/Shared%20Documents/General/Weekly%20Brief%20Report/Archive?csf=1&web=1&e=3tS4ZG" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">SharePoint Archive ↗</a>
+                <strong>Templates &amp; Details:</strong> <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Role Rotation Dashboard ↗</a>
               </div>
 
               <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 12px; color: #b2bec3; text-align: center;">

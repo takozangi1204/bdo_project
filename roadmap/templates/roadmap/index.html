@@ -726,19 +726,16 @@
             border-radius: 14px;
             box-shadow: var(--shadow-lg);
             width: 480px;
-            max-width: 95vw;
-            max-height: 85vh;
+            max-width: 92vw;
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
         }
 
         .modal-head {
-            padding: 16px 20px 12px;
+            padding: 18px 22px 14px;
             border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-            background: #fff;
         }
 
         .modal-head h2 {
@@ -753,25 +750,18 @@
         }
 
         .modal-body {
-            padding: 16px 20px;
+            padding: 18px 22px;
             overflow-y: auto;
-            flex: 1 1 auto;
-            -webkit-overflow-scrolling: touch;
+            flex: 1;
         }
 
         .modal-foot {
-            padding: 12px 20px;
+            padding: 14px 22px;
             display: flex;
-            flex-direction: row;
             justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
+            gap: 8px;
             border-top: 1px solid var(--border);
             background: #fafbfc;
-            flex-shrink: 0;
-            position: sticky;
-            bottom: 0;
-            z-index: 10;
         }
 
         .form-group {
@@ -1042,168 +1032,7 @@
         .password-modal .pm-btn-cancel:hover {
             background: #e2e6ea;
         }
-        /* ══════════════════════════════════════════════════
-           RESPONSIVE MOBILE / SMARTPHONE STYLES
-           ══════════════════════════════════════════════════ */
-        @media (max-width: 768px) {
-            .app-header {
-                padding: 12px 16px;
-                gap: 10px;
-            }
-            .app-header h1 {
-                font-size: 1.1rem;
-            }
-            .app-header h1 span {
-                display: block;
-                font-size: 0.75rem;
-                margin-top: 2px;
-            }
-            .app-nav-switcher {
-                width: 100%;
-                justify-content: space-around;
-                overflow-x: auto;
-                padding: 2px;
-            }
-            .app-nav-link {
-                padding: 4px 10px;
-                font-size: 0.72rem;
-                white-space: nowrap;
-            }
-            .header-actions {
-                width: 100%;
-                justify-content: stretch;
-                gap: 6px;
-            }
-            .header-actions .btn {
-                flex: 1 1 calc(50% - 6px);
-                justify-content: center;
-                padding: 8px 10px;
-                font-size: 0.75rem;
-            }
-            .legend-bar {
-                padding: 8px 16px;
-                gap: 8px;
-                overflow-x: auto;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-            }
-            .legend-swatch, .legend-break {
-                font-size: 0.68rem;
-                padding: 3px 8px;
-            }
-            .gantt-wrap {
-                margin: 12px auto;
-                padding: 0 8px 24px;
-            }
-            .gantt-toolbar {
-                padding: 10px 12px;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-            .toolbar-left, .toolbar-right {
-                width: 100%;
-                justify-content: space-between;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .gantt-label-cell {
-                width: 130px;
-                min-width: 130px;
-                padding: 0 6px;
-            }
-            .gantt-row.task-row .gantt-label-cell {
-                min-height: 44px;
-            }
-            .label-text {
-                font-size: 0.7rem;
-                line-height: 1.2;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-            }
-            .label-actions {
-                opacity: 1; /* Always show action buttons on touch devices */
-            }
-            .label-action-btn {
-                width: 24px;
-                height: 24px;
-            }
-            .gantt-bar {
-                font-size: 0.62rem;
-                padding: 0 6px;
-                min-height: 26px;
-            }
-            .modal-backdrop {
-                padding: 10px;
-                align-items: center;
-                justify-content: center;
-            }
-            .modal {
-                width: 96vw !important;
-                max-width: 96vw !important;
-                max-height: 88vh !important;
-                border-radius: 12px;
-            }
-            .modal-head {
-                padding: 12px 14px 10px;
-                flex-shrink: 0 !important;
-            }
-            .modal-body {
-                padding: 12px 14px;
-                overflow-y: auto !important;
-                flex: 1 1 auto !important;
-                max-height: calc(88vh - 120px) !important;
-                -webkit-overflow-scrolling: touch !important;
-            }
-            .modal-foot {
-                padding: 10px 14px !important;
-                display: flex !important;
-                flex-direction: row !important;
-                gap: 10px !important;
-                justify-content: space-between !important;
-                background: #fafbfc !important;
-                flex-shrink: 0 !important;
-                position: sticky !important;
-                bottom: 0 !important;
-                z-index: 30 !important;
-            }
-            .modal-foot .btn {
-                flex: 1 1 50% !important;
-                min-height: 42px !important;
-                font-size: 0.85rem !important;
-                justify-content: center !important;
-            }
-            .date-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            .toast-container {
-                left: 16px;
-                right: 16px;
-                bottom: 16px;
-            }
-            .toast {
-                width: 100%;
-                justify-content: center;
-            }
-        }
 
-        @media (max-width: 480px) {
-            .gantt-label-cell {
-                width: 110px;
-                min-width: 110px;
-            }
-            .header-actions .btn {
-                flex: 1 1 100%;
-            }
-            .password-modal {
-                width: 90vw;
-                padding: 20px 16px;
-            }
-        }
     </style>
 </head>
 

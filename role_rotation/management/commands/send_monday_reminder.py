@@ -210,8 +210,8 @@ class Command(BaseCommand):
                 else:
                     recipient_list = ['takozangi0619@outlook.jp', 'takozangi0619@icloud.com']
 
-        to_emails = recipient_list
-        bcc_emails = []
+        to_emails = []
+        bcc_emails = recipient_list
 
         email = EmailMultiAlternatives(
             subject=subject,

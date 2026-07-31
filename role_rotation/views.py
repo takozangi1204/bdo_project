@@ -250,7 +250,7 @@ def trigger_monday_reminder(request):
 
     return JsonResponse({
         'status': 'success',
-        'message': 'Monday 8:00 AM update email sent successfully.'
+        'message': 'Monday update email sent successfully.'
     })
 
 

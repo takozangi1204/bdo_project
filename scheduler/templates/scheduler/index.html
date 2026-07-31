@@ -1126,6 +1126,144 @@
     .password-modal .pm-btn-cancel { background: #f0f0f0; color: #636e72; }
     .password-modal .pm-btn-cancel:hover { background: #e2e6ea; }
     .password-modal .pm-error { color: #e17055; font-size: 0.8rem; margin-bottom: 10px; min-height: 1.2em; }
+
+    /* ══════════════════════════════════════════════════
+       RESPONSIVE MOBILE / SMARTPHONE STYLES
+       ══════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .app-header {
+        padding: 12px 16px;
+        gap: 10px;
+      }
+      .app-header h1 {
+        font-size: 1.1rem;
+      }
+      .app-header h1 span {
+        display: block;
+        font-size: 0.75rem;
+        margin-top: 2px;
+      }
+      .app-nav-switcher {
+        width: 100%;
+        justify-content: space-around;
+        overflow-x: auto;
+        padding: 2px;
+        margin-left: 0;
+      }
+      .app-nav-link {
+        padding: 4px 10px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+      }
+      .header-actions {
+        width: 100%;
+        justify-content: stretch;
+        gap: 6px;
+      }
+      .header-actions .btn {
+        flex: 1 1 calc(50% - 6px);
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 0.75rem;
+      }
+      .legend-bar {
+        padding: 8px 16px;
+        gap: 8px;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .legend-item, .legend-break {
+        font-size: 0.68rem;
+        padding: 3px 8px;
+      }
+      .calendar-wrap {
+        padding: 0 8px 24px;
+        margin-top: 12px;
+      }
+      .cal-toolbar {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .cal-toolbar .toolbar-left,
+      .cal-toolbar .toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .cal-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .cal-table {
+        min-width: 650px; /* Ensures columns stay readable on phone viewports */
+      }
+      .cal-table th, .cal-table td {
+        font-size: 0.68rem;
+        padding: 4px 3px;
+      }
+      .cal-table th:first-child, .cal-table td:first-child {
+        width: 65px;
+        min-width: 65px;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background: #fff;
+      }
+      .cal-table th:first-child {
+        background: #fafbfc;
+      }
+      .event-pill {
+        font-size: 0.62rem;
+        padding: 2px 5px;
+        margin-bottom: 2px;
+      }
+      .modal {
+        width: 95vw;
+        max-width: 95vw;
+        border-radius: 12px;
+      }
+      .modal-head {
+        padding: 14px 16px 10px;
+      }
+      .modal-body {
+        padding: 14px 16px;
+      }
+      .modal-foot {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+      }
+      .modal-foot .btn {
+        flex: 1;
+        justify-content: center;
+      }
+      .time-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .toast-container {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+      }
+      .toast {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-actions .btn {
+        flex: 1 1 100%;
+      }
+      .password-modal {
+        width: 90vw;
+        padding: 20px 16px;
+      }
+    }
   </style>
 </head>
 

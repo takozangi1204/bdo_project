@@ -295,13 +295,17 @@
       background: var(--surface);
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       border: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+      position: relative;
     }
 
     /* ── Table ── */
     .cal-table {
       width: 100%;
+      min-width: 800px;
       border-collapse: collapse;
       table-layout: fixed;
     }
@@ -322,6 +326,11 @@
       width: 90px;
       text-align: left;
       padding-left: 14px;
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      background: #f8f9fb !important;
+      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
     }
 
     .cal-table td {
@@ -1178,67 +1187,86 @@
         padding: 3px 8px;
       }
       .calendar-wrap {
-        padding: 0 8px 24px;
-        margin-top: 12px;
+        padding: 0 6px 20px;
+        margin-top: 10px;
       }
-      .cal-toolbar {
-        padding: 10px 12px;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-      .cal-toolbar .toolbar-left,
-      .cal-toolbar .toolbar-right {
-        width: 100%;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .cal-table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+      .calendar {
+        border-radius: 10px;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x pan-y;
       }
       .cal-table {
-        min-width: 650px; /* Ensures columns stay readable on phone viewports */
+        min-width: 820px !important; /* Ensures Mon-Sun all render with full readable widths */
       }
       .cal-table th, .cal-table td {
-        font-size: 0.68rem;
-        padding: 4px 3px;
+        font-size: 0.7rem;
+        padding: 5px 4px;
       }
       .cal-table th:first-child, .cal-table td:first-child {
-        width: 65px;
-        min-width: 65px;
-        position: sticky;
-        left: 0;
-        z-index: 5;
-        background: #fff;
+        width: 70px !important;
+        min-width: 70px !important;
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 12 !important;
+        background: #f8f9fb !important;
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.12) !important;
       }
-      .cal-table th:first-child {
-        background: #fafbfc;
+      /* Highlight Saturday & Sunday header/body cells on mobile */
+      .cal-table th:nth-child(7),
+      .cal-table th:nth-child(8) {
+        background: #f0edff !important;
+        color: #6c5ce7 !important;
+        font-weight: 700 !important;
+      }
+      .cal-table td:nth-child(7),
+      .cal-table td:nth-child(8) {
+        background-color: rgba(108, 92, 231, 0.03);
       }
       .event-pill {
         font-size: 0.62rem;
         padding: 2px 5px;
         margin-bottom: 2px;
       }
+      .modal-backdrop {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+      }
       .modal {
-        width: 95vw;
-        max-width: 95vw;
+        width: 96vw !important;
+        max-width: 96vw !important;
+        max-height: 88vh !important;
         border-radius: 12px;
       }
       .modal-head {
-        padding: 14px 16px 10px;
+        padding: 12px 14px 10px;
+        flex-shrink: 0 !important;
       }
       .modal-body {
-        padding: 14px 16px;
+        padding: 12px 14px;
+        overflow-y: auto !important;
+        flex: 1 1 auto !important;
+        max-height: calc(88vh - 120px) !important;
+        -webkit-overflow-scrolling: touch !important;
       }
       .modal-foot {
-        padding: 12px 16px;
-        flex-wrap: wrap;
+        padding: 10px 14px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        justify-content: space-between !important;
+        background: #fafbfc !important;
+        flex-shrink: 0 !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        z-index: 30 !important;
       }
       .modal-foot .btn {
-        flex: 1;
-        justify-content: center;
+        flex: 1 1 50% !important;
+        min-height: 42px !important;
+        font-size: 0.85rem !important;
+        justify-content: center !important;
       }
       .time-row {
         flex-direction: column;

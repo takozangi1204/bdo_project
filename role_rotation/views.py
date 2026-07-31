@@ -187,6 +187,19 @@ def _async_send_monday(recipient):
     except Exception as e:
         print("Async Monday Email Error:", e)
 
+def _async_send_writer(recipient):
+    try:
+        from django.core.management import call_command
+        out = StringIO()
+        if recipient:
+            call_command('send_writer_reminder', recipient=recipient, stdout=out)
+        else:
+            call_command('send_writer_reminder', stdout=out)
+        print("Background Writer Email Success:", out.getvalue())
+    except Exception as e:
+        print("Async Writer Email Error:", e)
+
+
 @csrf_exempt
 def trigger_friday_reminder(request):
     """Trigger Friday email reminder."""
@@ -238,6 +251,33 @@ def trigger_monday_reminder(request):
     return JsonResponse({
         'status': 'success',
         'message': 'Monday 8:00 AM update email sent successfully.'
+    })
+
+
+@csrf_exempt
+def trigger_writer_reminder(request):
+    """Trigger targeted reminder email to the assigned Weekly Brief Report writer."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+
+    recipient = None
+    if request.body:
+        try:
+            data = json.loads(request.body)
+            if data.get('recipient'):
+                recipient = data.get('recipient')
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    if 'test' in sys.argv:
+        _async_send_writer(recipient)
+    else:
+        t = threading.Thread(target=_async_send_writer, args=(recipient,), daemon=False)
+        t.start()
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'Reminder email sent to assigned Weekly Brief Report writer.'
     })
 
 

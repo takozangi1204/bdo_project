@@ -630,7 +630,12 @@
         <section class="cadence-section">
             <div class="section-header">
                 <div class="section-title">1. Brief Weekly Report</div>
-                <button class="btn btn-secondary edit-only" id="btn-edit-summary" onclick="toggleEditSummary()">Edit</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary edit-only" style="background: #6c5ce7; color: #fff;" onclick="triggerWriterReminder()">
+                        🔔 Remind Assigned Writer
+                    </button>
+                    <button class="btn btn-secondary edit-only" id="btn-edit-summary" onclick="toggleEditSummary()">Edit</button>
+                </div>
             </div>
             <div class="section-description" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; background: #f8f9fa; padding: 16px 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--accent);">
                 <p style="margin-bottom: 12px; font-weight: 500; color: #2d3436;">
@@ -1195,6 +1200,28 @@
                 }
             } catch (err) {
                 showToast(err.message || 'Error sending Monday reminder', 'error');
+            }
+        }
+
+        async function triggerWriterReminder() {
+            showToast('Sending targeted reminder to assigned Weekly Brief Report writer...');
+            try {
+                const res = await fetch('/role_rotation/api/send-writer-reminder/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!res.ok) {
+                    showToast('Server returned status ' + res.status + '. Check logs.', 'error');
+                    return;
+                }
+                const data = await res.json();
+                if (data.status === 'success') {
+                    showToast(data.message);
+                } else {
+                    showToast(data.message || 'Failed to send writer reminder', 'error');
+                }
+            } catch (err) {
+                showToast(err.message || 'Error sending writer reminder', 'error');
             }
         }
 

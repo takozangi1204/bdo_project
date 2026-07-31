@@ -121,6 +121,18 @@ class CadenceViewsTest(TestCase):
         self.assertEqual(res.status_code, 403)
 
 
+    def test_trigger_writer_reminder_api(self):
+        from role_rotation.models import EmailRecipient
+        EmailRecipient.objects.create(name="Taiki", email="taiki@example.com", is_active=True)
+        response = self.client.post(reverse('role_rotation_trigger_writer_reminder'), data=json.dumps({'recipient': 'writer@example.com'}), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ['writer@example.com'])
+        self.assertIn("Weekly Brief Report", mail.outbox[0].subject)
+
+
 class SendFridayReminderCommandTest(TestCase):
     def setUp(self):
         WeeklyTask.objects.create(
@@ -140,3 +152,13 @@ class SendFridayReminderCommandTest(TestCase):
         WeeklyTask.objects.filter(day_of_week=5).delete()
         call_command('send_friday_reminder', day=5)
         self.assertEqual(len(mail.outbox), 0)
+
+
+class SendWriterReminderCommandTest(TestCase):
+    def test_command_sends_targeted_email_to_writer(self):
+        from role_rotation.models import EmailRecipient
+        EmailRecipient.objects.create(name="Taiki", email="taiki@example.com", is_active=True)
+        call_command('send_writer_reminder')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("Weekly Brief Report", mail.outbox[0].subject)
+

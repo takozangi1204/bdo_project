@@ -113,7 +113,7 @@ class Command(BaseCommand):
             </tr>
             """
 
-        subject = f"[BDO MBUA Project] {current_week} Reminder"
+        subject = f"[BDO MBUA Project] {current_week} Update"
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@bdo.local')
 
         site_url = os.environ.get('APP_URL') or os.environ.get('SITE_URL') or 'https://bdo-project-app.onrender.com'
@@ -127,7 +127,7 @@ class Command(BaseCommand):
 
         text_message = (
             f"Hello Team,\n\n"
-            f"Here is your [BDO MBUA Project] {current_week} Reminder:\n\n"
+            f"Here is your [BDO MBUA Project] {current_week} Update:\n\n"
             f"1. Brief Weekly Report Table:\n"
             f"Active Writer for {current_week}: {curr_summary['writer']} (Internal Deadline: {curr_summary['deadline']})\n\n"
             f"2. Next Meeting with BDO:\n"
@@ -142,7 +142,7 @@ class Command(BaseCommand):
         <html>
           <body style="font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #2d3436; max-width: 750px; margin: 0 auto; padding: 0; background-color: #ffffff;">
             <div style="padding: 16px 20px;">
-              <h2 style="font-size: 18px; font-weight: 700; color: #1a1a2e; margin-top: 0; margin-bottom: 16px; border-bottom: 2px solid #6c5ce7; padding-bottom: 8px;">[BDO MBUA Project] {current_week} Reminder</h2>
+              <h2 style="font-size: 18px; font-weight: 700; color: #1a1a2e; margin-top: 0; margin-bottom: 16px; border-bottom: 2px solid #6c5ce7; padding-bottom: 8px;">[BDO MBUA Project] {current_week} Update</h2>
 
               <!-- SECTION 1 -->
               <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 8px;">1. Brief Weekly Report</h3>
@@ -180,8 +180,12 @@ class Command(BaseCommand):
               <!-- SECTION 3: THIS WEEK'S SCHEDULE -->
               {section3_html}
 
-              <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 12px; color: #636e72;">
-                Check the details: <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">{app_url} ↗</a>
+              <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 13px; color: #636e72;">
+                Check the details: <a href="{app_url}" target="_blank" style="color: #6c5ce7; font-weight: 600; text-decoration: none;">Role Rotation Dashboard ↗</a>
+              </div>
+
+              <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #e2e6ea; font-size: 12px; color: #b2bec3; text-align: center;">
+                BDO MBUA Project • Role Rotation System
               </div>
             </div>
           </body>

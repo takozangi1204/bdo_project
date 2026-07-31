@@ -1,9 +1,11 @@
-name: Send Monday Email Reminder (Direct Runner)
+name: Send Email Reminders (Direct Runner)
 
 on:
   schedule:
-    # 5-minute test schedule for verifying automated GitHub Actions time triggers
-    - cron: '*/5 * * * *'
+    # Every Friday 5:50 PM NZST (Friday 05:50 UTC)
+    - cron: '50 5 * * 5'
+    # Every Monday 8:00 AM NZST (Sunday 20:00 UTC)
+    - cron: '0 20 * * 0'
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:
@@ -24,7 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Monday Email Command directly
+      - name: Run Email Reminders directly
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
@@ -34,4 +36,5 @@ jobs:
           EMAIL_HOST_USER: ${{ secrets.GMAIL_USER }}
           EMAIL_HOST_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         run: |
+          python manage.py send_friday_reminder
           python manage.py send_monday_reminder

@@ -91,7 +91,7 @@ class Command(BaseCommand):
             badge = get_person_tag(r['writer'])
             summary_rows_html += f"""
             <tr style="{bg_style}">
-                <td style="padding: 10px 14px; border-bottom: 1px solid #e2e6ea; font-weight: bold;">{r['week']}</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #e2e6ea; font-weight: bold; color: #1a1a2e;">{r['week']}</td>
                 <td style="padding: 10px 14px; border-bottom: 1px solid #e2e6ea;">{badge}</td>
                 <td style="padding: 10px 14px; border-bottom: 1px solid #e2e6ea; color: #636e72;">{r['deadline']}</td>
             </tr>
@@ -160,8 +160,8 @@ class Command(BaseCommand):
 
               <!-- SECTION 2 -->
               <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 6px;">2. Next Meeting with BDO</h3>
-              <div style="font-size: 13px; font-weight: 700; color: #92400e; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
-                Week {curr_meeting['week_num']}: {curr_meeting['date_label']}
+              <div style="font-size: 13px; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
+                <strong style="color: #1a1a2e;">Week {curr_meeting['week_num']}</strong>: <span style="color: #636e72; font-weight: 500;">{curr_meeting['date_label']}</span>
               </div>
               <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
                 <thead>

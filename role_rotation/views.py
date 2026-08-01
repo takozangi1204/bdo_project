@@ -314,6 +314,7 @@ def download_template(request, recipient):
     recipient_lower = recipient.lower()
     if 'james' in recipient_lower:
         candidates = [
+            os.path.join(root_dir, '[James Template] [BDO MBUA Project] Brief Weekly Report.docx'),
             os.path.join(root_dir, '[James version Template] [BDO MBUA Project] Brief Weekly Report.docx'),
             os.path.join(cadence_templates_dir, 'James_Brief_Weekly_Report_Template.docx'),
             os.path.join(role_rotation_templates_dir, 'James_Brief_Weekly_Report_Template.docx'),

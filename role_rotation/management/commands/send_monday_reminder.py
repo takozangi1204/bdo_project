@@ -162,7 +162,7 @@ class Command(BaseCommand):
               <!-- SECTION 2 -->
               <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 6px;">2. Next Meeting with BDO</h3>
               <div style="font-size: 13px; font-weight: 600; color: #92400e; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
-                📅 Upcoming Meeting: <strong>Week {curr_meeting['week_num']}</strong> — <span>{curr_meeting['date_label']}</span>
+                {curr_meeting['date_label']}
               </div>
               <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
                 <thead>

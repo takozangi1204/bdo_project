@@ -104,7 +104,6 @@ class Command(BaseCommand):
             bg_style = 'background: #fffdf0; border-left: 4px solid #d97706;'
             meeting_rows_html += f"""
             <tr style="{bg_style}">
-                <td style="padding: 10px 12px; border-bottom: 1px solid #e2e6ea; font-size: 13px; font-weight: bold;">{r['dateTime']}</td>
                 <td style="padding: 10px 12px; border-bottom: 1px solid #e2e6ea;">{get_person_tag(r['chair'])}</td>
                 <td style="padding: 10px 12px; border-bottom: 1px solid #e2e6ea;">{get_person_tag(r['asking'])}</td>
                 <td style="padding: 10px 12px; border-bottom: 1px solid #e2e6ea;">{get_person_tag(r['notes'])}</td>
@@ -131,7 +130,7 @@ class Command(BaseCommand):
             f"1. Brief Weekly Report Table:\n"
             f"Active Writer for {current_week}: {curr_summary['writer']} (Internal Deadline: {curr_summary['deadline']})\n\n"
             f"2. Next Meeting with BDO:\n"
-            f"Upcoming Meeting: Week {curr_meeting['week_num']} ({curr_meeting['date_label']})\n"
+            f"Week {curr_meeting['week_num']}: {curr_meeting['date_label']}\n"
             f"Chairperson: {curr_meeting['chair']} | Asking: {curr_meeting['asking']} | Notes: {curr_meeting['notes']} | Agenda: {curr_meeting['agenda']} | Resting: {curr_meeting['resting']}\n\n"
             f"{section3_text}\n"
             f"Check the details: {app_url}\n\n"
@@ -161,13 +160,12 @@ class Command(BaseCommand):
 
               <!-- SECTION 2 -->
               <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 6px;">2. Next Meeting with BDO</h3>
-              <div style="font-size: 13px; font-weight: 600; color: #92400e; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
-                {curr_meeting['date_label']}
+              <div style="font-size: 13px; font-weight: 700; color: #92400e; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
+                Week {curr_meeting['week_num']}: {curr_meeting['date_label']}
               </div>
               <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
                 <thead>
                   <tr style="background: #f8f9fa; color: #636e72; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">
-                    <th style="padding: 8px 10px; text-align: left; border-bottom: 2px solid #e2e6ea;">Meeting Date & Time</th>
                     <th style="padding: 8px 10px; text-align: left; border-bottom: 2px solid #e2e6ea;">Chairperson</th>
                     <th style="padding: 8px 10px; text-align: left; border-bottom: 2px solid #e2e6ea;">Asking Questions</th>
                     <th style="padding: 8px 10px; text-align: left; border-bottom: 2px solid #e2e6ea;">Taking Notes</th>

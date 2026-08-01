@@ -58,12 +58,12 @@ class Command(BaseCommand):
         ]
 
         meeting_rotation = [
-            {'week_num': 2, 'meeting_date': datetime.date(2026, 7, 16), 'date_label': '16 Jul, 2:00 PM', 'dateTime': '<strong>Week 2</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(16 Jul, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
-            {'week_num': 4, 'meeting_date': datetime.date(2026, 7, 30), 'date_label': '30 Jul, 2:00 PM', 'dateTime': '<strong>Week 4</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(30 Jul, 2:00 PM)</span>', 'chair': 'Taiki', 'asking': 'Yusuf', 'notes': 'Ding', 'agenda': 'Sarala', 'resting': 'Suhani'},
-            {'week_num': 6, 'meeting_date': datetime.date(2026, 8, 11), 'date_label': '11 Aug, 11:00 AM', 'dateTime': '<strong>Week 6</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(11 Aug, 11:00 AM)</span>', 'chair': 'Yusuf', 'asking': 'Ding', 'notes': 'Sarala', 'agenda': 'Suhani', 'resting': 'Taiki'},
-            {'week_num': 8, 'meeting_date': datetime.date(2026, 8, 27), 'date_label': '27 Aug, 2:00 PM', 'dateTime': '<strong>Week 8</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(27 Aug, 2:00 PM)</span>', 'chair': 'Ding', 'asking': 'Sarala', 'notes': 'Suhani', 'agenda': 'Taiki', 'resting': 'Yusuf'},
-            {'week_num': 11, 'meeting_date': datetime.date(2026, 9, 17), 'date_label': '17 Sep, 2:00 PM', 'dateTime': '<strong>Week 11</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(17 Sep, 2:00 PM)</span>', 'chair': 'Sarala', 'asking': 'Suhani', 'notes': 'Taiki', 'agenda': 'Yusuf', 'resting': 'Ding'},
-            {'week_num': 12, 'meeting_date': datetime.date(2026, 9, 24), 'date_label': '24 Sep, 2:00 PM', 'dateTime': '<strong>Week 12</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(24 Sep, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
+            {'week_num': 2, 'meeting_date': datetime.date(2026, 7, 16), 'date_label': 'Thu, 16 Jul, 2:00 PM', 'dateTime': '<strong>Week 2</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Thu, 16 Jul, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
+            {'week_num': 4, 'meeting_date': datetime.date(2026, 7, 30), 'date_label': 'Thu, 30 Jul, 2:00 PM', 'dateTime': '<strong>Week 4</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Thu, 30 Jul, 2:00 PM)</span>', 'chair': 'Taiki', 'asking': 'Yusuf', 'notes': 'Ding', 'agenda': 'Sarala', 'resting': 'Suhani'},
+            {'week_num': 6, 'meeting_date': datetime.date(2026, 8, 11), 'date_label': 'Tue, 11 Aug, 11:00 AM', 'dateTime': '<strong>Week 6</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Tue, 11 Aug, 11:00 AM)</span>', 'chair': 'Yusuf', 'asking': 'Ding', 'notes': 'Sarala', 'agenda': 'Suhani', 'resting': 'Taiki'},
+            {'week_num': 8, 'meeting_date': datetime.date(2026, 8, 27), 'date_label': 'Thu, 27 Aug, 2:00 PM', 'dateTime': '<strong>Week 8</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Thu, 27 Aug, 2:00 PM)</span>', 'chair': 'Ding', 'asking': 'Sarala', 'notes': 'Suhani', 'agenda': 'Taiki', 'resting': 'Yusuf'},
+            {'week_num': 11, 'meeting_date': datetime.date(2026, 9, 17), 'date_label': 'Thu, 17 Sep, 2:00 PM', 'dateTime': '<strong>Week 11</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Thu, 17 Sep, 2:00 PM)</span>', 'chair': 'Sarala', 'asking': 'Suhani', 'notes': 'Taiki', 'agenda': 'Yusuf', 'resting': 'Ding'},
+            {'week_num': 12, 'meeting_date': datetime.date(2026, 9, 24), 'date_label': 'Thu, 24 Sep, 2:00 PM', 'dateTime': '<strong>Week 12</strong><br><span style="font-size: 11px; color: #636e72; font-weight: normal;">(Thu, 24 Sep, 2:00 PM)</span>', 'chair': 'Suhani', 'asking': 'Taiki', 'notes': 'Yusuf', 'agenda': 'Ding', 'resting': 'Sarala'},
         ]
 
         for r in summary_rotation:
@@ -160,7 +160,10 @@ class Command(BaseCommand):
               </table>
 
               <!-- SECTION 2 -->
-              <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 8px;">2. Next Meeting with BDO</h3>
+              <h3 style="font-size: 15px; color: #1a1a2e; margin-top: 16px; margin-bottom: 6px;">2. Next Meeting with BDO</h3>
+              <div style="font-size: 13px; font-weight: 600; color: #92400e; background: #fffdf0; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 8px 12px; margin-bottom: 12px; border-radius: 6px;">
+                📅 Upcoming Meeting: <strong>Week {curr_meeting['week_num']}</strong> — <span>{curr_meeting['date_label']}</span>
+              </div>
               <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
                 <thead>
                   <tr style="background: #f8f9fa; color: #636e72; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">

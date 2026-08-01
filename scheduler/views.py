@@ -6,12 +6,12 @@ from django.db import transaction
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from .models import Category, Event, Todo, SchedulerSetting, BreakPeriod
-from config.views import require_edit_mode
+from config.views import require_edit_mode, get_current_app_mode
 
 
 def index(request):
     """Serve the Scheduler main page."""
-    mode = request.session.get('app_mode', 'view')
+    mode = get_current_app_mode(request)
     return render(request, 'scheduler/index.html', {'app_mode': mode})
 
 

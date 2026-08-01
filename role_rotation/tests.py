@@ -163,6 +163,17 @@ class SendWriterReminderCommandTest(TestCase):
         self.assertIn("Weekly Brief Report", mail.outbox[0].subject)
 
 
+class SendMondayReminderCommandTest(TestCase):
+    def test_command_sends_monday_email_with_weekdays(self):
+        call_command('send_monday_reminder', recipient='test@example.com')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].bcc, ['test@example.com'])
+        email_body = mail.outbox[0].body
+        self.assertIn("2. Next Meeting with BDO:", email_body)
+        # Check that weekday label is present (e.g., Thu or Tue)
+        self.assertTrue("Thu," in email_body or "Tue," in email_body)
+
+
 class DownloadTemplateViewTest(TestCase):
     def setUp(self):
         self.client = Client()

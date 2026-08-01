@@ -3316,6 +3316,19 @@
       });
     }
 
+    // Global Mode Synchronization Across Users
+    function checkGlobalModeSync() {
+      fetch('/api/mode/status/')
+        .then(r => r.json())
+        .then(d => {
+          if (d.status === 'success' && d.mode && d.mode !== currentMode) {
+            applyModeUI(d.mode);
+          }
+        })
+        .catch(() => {});
+    }
+    setInterval(checkGlobalModeSync, 5000);
+
     applyModeUI(currentMode);
   </script>
 </body>

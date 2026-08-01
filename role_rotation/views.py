@@ -4,14 +4,14 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
-from config.views import require_edit_mode
+from config.views import require_edit_mode, get_current_app_mode
 from .models import WeeklyTask
 
 
 def cadence_dashboard(request):
     """Renders the Weekly Cadence Dashboard."""
     tasks = WeeklyTask.objects.all().order_by('day_of_week', 'time', 'id')
-    mode = request.session.get('app_mode', 'view')
+    mode = get_current_app_mode(request)
     return render(request, 'role_rotation/dashboard.html', {
         'tasks': tasks,
         'weekdays': WeeklyTask.WEEKDAYS,

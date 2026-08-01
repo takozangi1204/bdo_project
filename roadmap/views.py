@@ -3,14 +3,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from config.views import require_edit_mode
+from config.views import require_edit_mode, get_current_app_mode
 import json 
 from .models import Phase, Task
 # Create your views here.
 
 def index(request):
     is_superuser = request.user.is_authenticated and request.user.is_superuser
-    mode = request.session.get('app_mode', 'view')
+    mode = get_current_app_mode(request)
     return render(request, 'roadmap/index.html', {'is_superuser': is_superuser, 'app_mode': mode})
 
 DEFAULT_PHASES = [

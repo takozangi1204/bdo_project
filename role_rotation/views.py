@@ -307,24 +307,35 @@ def download_template(request, recipient):
     from django.http import FileResponse, Http404
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    templates_dir = os.path.join(base_dir, 'static', 'role_rotation', 'templates')
+    cadence_templates_dir = os.path.join(base_dir, 'static', 'cadence', 'templates')
+    role_rotation_templates_dir = os.path.join(base_dir, 'static', 'role_rotation', 'templates')
     root_dir = os.path.dirname(base_dir)
     
     recipient_lower = recipient.lower()
     if 'james' in recipient_lower:
-        file_path = os.path.join(templates_dir, 'James_Brief_Weekly_Report_Template.docx')
-        if not os.path.exists(file_path):
-            file_path = os.path.join(root_dir, '[James version Template] [BDO MBUA Project] Brief Weekly Report.docx')
+        candidates = [
+            os.path.join(root_dir, '[James version Template] [BDO MBUA Project] Brief Weekly Report.docx'),
+            os.path.join(cadence_templates_dir, 'James_Brief_Weekly_Report_Template.docx'),
+            os.path.join(role_rotation_templates_dir, 'James_Brief_Weekly_Report_Template.docx'),
+        ]
         filename = '[James Template] [BDO MBUA Project] Brief Weekly Report.docx'
     elif 'michel' in recipient_lower or 'michael' in recipient_lower:
-        file_path = os.path.join(templates_dir, 'Michel_Brief_Weekly_Report_Template.docx')
-        if not os.path.exists(file_path):
-            file_path = os.path.join(root_dir, '[Michael version Template] BriefWeeklyReport.docx')
-        filename = '[Michel Template] [BDO MBUA Project] Brief Weekly Report.docx'
+        candidates = [
+            os.path.join(root_dir, '[Michel Template] [MBUA 532] Brief Weekly Report.docx'),
+            os.path.join(cadence_templates_dir, 'Michel_Brief_Weekly_Report_Template.docx'),
+            os.path.join(role_rotation_templates_dir, 'Michel_Brief_Weekly_Report_Template.docx'),
+        ]
+        filename = '[Michel Template] [MBUA 532] Brief Weekly Report.docx'
     else:
         raise Http404("Template recipient not found")
         
-    if not os.path.exists(file_path):
+    file_path = None
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            file_path = candidate
+            break
+
+    if not file_path:
         raise Http404("Template file not found")
         
     response = FileResponse(open(file_path, 'rb'), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')

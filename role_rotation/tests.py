@@ -162,3 +162,19 @@ class SendWriterReminderCommandTest(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("Weekly Brief Report", mail.outbox[0].subject)
 
+
+class DownloadTemplateViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_download_michel_template(self):
+        response = self.client.get(reverse('role_rotation_download_template', args=['michel']))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('[Michel Template] [MBUA 532] Brief Weekly Report.docx', response['Content-Disposition'])
+
+    def test_download_james_template(self):
+        response = self.client.get(reverse('role_rotation_download_template', args=['james']))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('[James Template] [BDO MBUA Project] Brief Weekly Report.docx', response['Content-Disposition'])
+
+

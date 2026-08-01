@@ -45,13 +45,38 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         recipient_arg = options.get('recipient')
         from role_rotation.models import EmailRecipient
+        import datetime
+
+        today = datetime.date.today()
+        week1_monday = datetime.date(2026, 7, 6)
+        days_diff = (today - week1_monday).days
+        current_week_num = max(1, min(12, (days_diff // 7) + 1))
+        current_week = f"Week {current_week_num}"
+
+        summary_rotation = [
+            {'week_num': 1, 'week': 'Week 1', 'writer': 'Ding', 'deadline': 'Sun, 12 Jul, 11:59 PM'},
+            {'week_num': 2, 'week': 'Week 2', 'writer': 'Sarala', 'deadline': 'Sun, 19 Jul, 11:59 PM'},
+            {'week_num': 3, 'week': 'Week 3', 'writer': 'Suhani', 'deadline': 'Sun, 26 Jul, 11:59 PM'},
+            {'week_num': 4, 'week': 'Week 4', 'writer': 'Taiki', 'deadline': 'Sun, 2 Aug, 11:59 PM'},
+            {'week_num': 5, 'week': 'Week 5', 'writer': 'Yusuf', 'deadline': 'Sun, 9 Aug, 11:59 PM'},
+            {'week_num': 6, 'week': 'Week 6', 'writer': 'Ding', 'deadline': 'Sun, 16 Aug, 11:59 PM'},
+            {'week_num': 7, 'week': 'Week 7', 'writer': 'Sarala', 'deadline': 'Sun, 23 Aug, 11:59 PM'},
+            {'week_num': 8, 'week': 'Week 8', 'writer': 'Suhani', 'deadline': 'Sun, 30 Aug, 11:59 PM'},
+            {'week_num': 9, 'week': 'Week 9', 'writer': 'Taiki', 'deadline': 'Sun, 6 Sep, 11:59 PM'},
+            {'week_num': 10, 'week': 'Week 10', 'writer': 'No Need to Submit', 'deadline': 'N/A'},
+            {'week_num': 11, 'week': 'Week 11', 'writer': 'No Need to Submit', 'deadline': 'N/A'},
+        ]
+
+        curr_summary = next((r for r in summary_rotation if r['week_num'] == current_week_num), summary_rotation[-1])
+        writer_name = curr_summary['writer']
 
         if recipient_arg:
             recipient_list = [e.strip() for e in recipient_arg.split(',') if e.strip()]
         else:
-            db_emails = list(EmailRecipient.objects.filter(is_active=True).values_list('email', flat=True))
-            if db_emails:
-                recipient_list = db_emails
+            # Send ONLY to the assigned writer for the current week
+            recipient_obj = EmailRecipient.objects.filter(name__iexact=writer_name, is_active=True).first()
+            if recipient_obj:
+                recipient_list = [recipient_obj.email]
             else:
                 default_rem_email = getattr(settings, 'REMINDER_RECIPIENT_EMAIL', '')
                 if default_rem_email:

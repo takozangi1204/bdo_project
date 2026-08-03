@@ -24,7 +24,7 @@
    - 静的ファイルの集約 (`python manage.py collectstatic --no-input`)
    - DBマイグレーション (`python manage.py migrate`)
 2. **`Procfile`** （Webサーバー起動コマンド）
-   - `web: gunicorn config.wsgi:application`
+   - `web: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
 3. **`requirements.txt`** （依存ライブラリ一覧）
    - `Django`, `gunicorn`, `psycopg2-binary`, `dj-database-url`, `whitenoise` 等が含まれています。
 4. **`config/settings.py`**
@@ -85,7 +85,7 @@
 | **Root Directory** | 空欄 (リポジトリ直下の場合) |
 | **Runtime** | `Python 3` |
 | **Build Command** | `./build.sh` |
-| **Start Command** | `gunicorn config.wsgi:application` |
+| **Start Command** | `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT` |
 | **Instance Type** | **Free** |
 
 5. 画面下の「**Environment Variables (環境変数)**」を開き、以下の Key と Value を追加します：
